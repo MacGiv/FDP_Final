@@ -18,7 +18,7 @@ void Gotoxy(int posX, int posY);
 //Correct input checkers
 bool IsCorrectInput(int& userInput);
 bool IsCorrectInput(char& userInput);
-bool IsCorrectInput(string& userInput); //TODO Used?
+bool IsCorrectInput(string& userInput);
 
 //Create map with walls and walkables
 void CreateStandardMap(cellStruct myMap[mapSizeRows][mapSizeCols]);

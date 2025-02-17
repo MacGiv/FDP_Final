@@ -42,7 +42,6 @@ void StartLevel_1(bool& continueGame)
 		{
 			inputChar = _getch();
 			ProcessPlayerMovement(playerHasMoved, player, levelMap, inputChar);
-
 		}
 
 		//If player moved Draw player 

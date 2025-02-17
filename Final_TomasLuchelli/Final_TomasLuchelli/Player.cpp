@@ -34,8 +34,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			playerHasMoved = true;
 			break;
 		case CellTypes::WALL:
-			//Do nothing?
-			//Add move?
 			playerHasMoved = false;
 			break;
 		case CellTypes::EXIT:
@@ -46,7 +44,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			break;
 		default:
 			playerHasMoved = false;
-			//cout << "Impossible 'w' default entered";
 			break;
 		}
 		break;
@@ -61,7 +58,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			playerHasMoved = true;
 			break;
 		case CellTypes::WALL:
-			
 			playerHasMoved = false;
 			break;
 		case CellTypes::EXIT:
@@ -72,7 +68,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			break;
 		default:
 			playerHasMoved = false;
-			//cout << "Impossible 's' default entered";
 			break;
 		}
 		break;
@@ -87,7 +82,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			playerHasMoved = true;
 			break;
 		case CellTypes::WALL:
-			
 			playerHasMoved = false;
 			break;
 		case CellTypes::EXIT:
@@ -98,7 +92,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			break;
 		default:
 			playerHasMoved = false;
-			//cout << "Impossible 'a' default entered";
 			break;
 		}
 		break;
@@ -114,7 +107,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			playerHasMoved = true;
 			break;
 		case CellTypes::WALL:
-			
 			playerHasMoved = false;
 			break;
 		case CellTypes::EXIT:
@@ -125,7 +117,6 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 			break;
 		default:
 			playerHasMoved = false;
-			//cout << "Impossible 'd' default entered";
 			break;
 		}
 		break;

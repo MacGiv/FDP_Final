@@ -87,7 +87,8 @@ void StartLevel_2()
 		}
 		else if (playerHasAttacked)
 		{
-			//DRAW ATTACK
+			//Update attack logic
+			//Draw Attack
 		}
 
 		//Check win level condition

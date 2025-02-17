@@ -37,6 +37,10 @@ const int objetiveInfoPosX = 0;
 const int objetiveInfoPosY = 1;
 const int levelNumberInfoPosX = 0;
 const int levelNumberInfoPosY = 0;
+const int timeInfoPosX = 0;
+const int timeInfoPosY = mapStartPosY + mapSizeRows + 1;
+const int endLevelMsgPosX = 0;
+const int endLevelMsgPosY = timeInfoPosY + 1;
 
 //Amount of cells to attack depending on the weapon type:
 //Dagger attacks 1 cell.

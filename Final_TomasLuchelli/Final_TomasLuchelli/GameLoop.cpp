@@ -14,7 +14,9 @@ void StartGame()
 		StartLevel_1(continueGame);
 
 		//## Only For debugging ##
+		Gotoxy(endLevelMsgPosX, endLevelMsgPosY);
 		system("pause");
+		//## Only For debugging ##
 
 		//Start Level 2 / Tutorial Attack
 		

@@ -4,6 +4,7 @@
 void StartGame()
 {
 	bool continueGame = true;
+	bool playerLost = false;
 
 	do
 	{
@@ -11,7 +12,7 @@ void StartGame()
 
 		//Start Level 1 / Tutorial Movement & Exit Point
 		system("cls");
-		StartLevel_1(continueGame);
+		StartLevel_1(continueGame, playerLost);
 
 		//## Only For debugging ##
 		Gotoxy(endLevelMsgPosX, endLevelMsgPosY);

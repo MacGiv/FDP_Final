@@ -7,27 +7,28 @@ cellStruct player;
 bool endLevelConditionMet = false;
 double startTime, currentTime;
 
-void InitializeLevel_1(bool& continueGame);
+void InitializeLevel_1(bool& continueGame, bool& playerLost);
 void UpdateLevel_1(bool& continueGame);
 void DrawLevel_1();
 
-void StartLevel_1(bool& continueGame)
+void StartLevel_1(bool& continueGame, bool& playerLost)
 {
     srand(time(0));
     HideCursor();
-    InitializeLevel_1(continueGame);
+    InitializeLevel_1(continueGame, playerLost);
 
     do
     {
         currentTime = (clock() - startTime) / CLOCKS_PER_SEC; //Update time elapsed
         UpdateLevel_1(continueGame);
         DrawLevel_1();
-    } while (continueGame);
+    } while (continueGame && !playerLost);
 }
 
-void InitializeLevel_1(bool& continueGame)
+void InitializeLevel_1(bool& continueGame, bool& playerLost)
 {
     continueGame = true;
+    playerLost = false;
     startTime = clock();
     currentTime = 0;
     endLevelConditionMet = false;
@@ -49,7 +50,15 @@ void UpdateLevel_1(bool& continueGame)
     if (_kbhit())
     {
         inputChar = _getch();
-        ProcessPlayerMovement(playerHasMoved, player, levelMap, inputChar);
+        if (inputChar != 27)
+        {
+            ProcessPlayerMovement(playerHasMoved, player, levelMap, inputChar);
+        }
+        else
+        {
+            playerHasMoved = false;
+            continueGame = false;
+        }
     }
 
     // If player moved, update position
@@ -98,7 +107,7 @@ void DrawLevel_1()
     cout << "Level: " << 1;
 
     Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
-    cout << "Objective: Move the player to the exit using WASD.";
+    cout << "Objective: Move the player to the exit using WASD. Press ESC to exit.";
 
     // Draw time elapsed
     Gotoxy(timeInfoPosX, timeInfoPosY);

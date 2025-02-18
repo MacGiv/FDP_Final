@@ -69,34 +69,34 @@ void CreateStandardMap(cellStruct myMap[mapSizeRows][mapSizeCols])
 			{
 				if (i == 0 && j == 0)
 				{
-					myMap[i][j].cellChar = charWallCharTL;
+					myMap[i][j].cellChar = charWallTL;
 					myMap[i][j].cellType = CellTypes::WALL;
 				}
 				else if (i == 0 && j == mapSizeCols - 1)
 				{
-					myMap[i][j].cellChar = charWallCharTR;
+					myMap[i][j].cellChar = charWallTR;
 					myMap[i][j].cellType = CellTypes::WALL;
 				}
 				else if (i == mapSizeRows - 1 && j == 0)
 				{
-					myMap[i][j].cellChar = charWallCharBL;
+					myMap[i][j].cellChar = charWallBL;
 					myMap[i][j].cellType = CellTypes::WALL;
 				}
 				else if (i == mapSizeRows - 1 && j == mapSizeCols - 1)
 				{
-					myMap[i][j].cellChar = charWallCharBR;
+					myMap[i][j].cellChar = charWallBR;
 					myMap[i][j].cellType = CellTypes::WALL;
 				}
 				else
 				{
-					myMap[i][j].cellChar = charWallCharH;
+					myMap[i][j].cellChar = charWallH;
 					myMap[i][j].cellType = CellTypes::WALL;
 				}
 
 			}
 			else if (j == 0 || j == mapSizeCols - 1)
 			{
-				myMap[i][j].cellChar = charWallCharV;
+				myMap[i][j].cellChar = charWallV;
 				myMap[i][j].cellType = CellTypes::WALL;
 			}
 			else

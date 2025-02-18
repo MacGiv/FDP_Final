@@ -5,3 +5,5 @@
 #include "Player.h";
 
 void StartLevel_1(bool& continueGame, bool& playerLost);
+
+void CalculateFPS();

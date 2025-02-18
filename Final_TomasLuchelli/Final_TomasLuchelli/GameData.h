@@ -2,12 +2,12 @@
 
 
 //Walls characters
-const char charWallCharTL = 201;
-const char charWallCharTR = 187;
-const char charWallCharBL = 200;
-const char charWallCharBR = 188;
-const char charWallCharH = 205;
-const char charWallCharV = 186;
+const char charWallTL = 201; // Top Left
+const char charWallTR = 187; // Top Right
+const char charWallBL = 200; // Bottom Left
+const char charWallBR = 188; // Bottom Right
+const char charWallH = 205;	 // Horizontal
+const char charWallV = 186;	 // Vertical
 
 //Colors
 const int colorWall = 7;		// White
@@ -22,6 +22,7 @@ const char charEnemy = 134;
 const char charEnemyBoss = 143;
 const char charExit = 'E';
 const char charEmpty = 249;
+const char charEscapeKey = 27;
 
 //Map and position related variables
 const int minPosMap = 0;
@@ -39,8 +40,10 @@ const int levelNumberInfoPosX = 0;
 const int levelNumberInfoPosY = 0;
 const int timeInfoPosX = 0;
 const int timeInfoPosY = mapStartPosY + mapSizeRows + 1;
+const int fpsInfoPosX = 0;
+const int fpsInfoPosY = timeInfoPosY + 1;
 const int endLevelMsgPosX = 0;
-const int endLevelMsgPosY = timeInfoPosY + 1;
+const int endLevelMsgPosY = fpsInfoPosY + 1;
 
 //Amount of cells to attack depending on the weapon type:
 //Dagger attacks 1 cell.

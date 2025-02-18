@@ -1,31 +1,38 @@
 #include "Level_1.h"
-#include <ctime>  // Para medir el tiempo con clock()
 
 HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap[mapSizeRows][mapSizeCols];
 cellStruct player;
 bool endLevelConditionMet = false;
-double startTime, currentTime;
+double startTime = 0;
+double currentTime = 0;
+double lastTime = 0;    
+int fps = 0;            
+int frameCount = 0;    
 
-void InitializeLevel_1(bool& continueGame, bool& playerLost);
-void UpdateLevel_1(bool& continueGame);
-void DrawLevel_1();
+void Initialize(bool& continueGame, bool& playerLost);
+void Update(bool& continueGame);
+void Draw();
 
 void StartLevel_1(bool& continueGame, bool& playerLost)
 {
     srand(time(0));
     HideCursor();
-    InitializeLevel_1(continueGame, playerLost);
+    Initialize(continueGame, playerLost);
+    lastTime = clock();
 
     do
     {
-        currentTime = (clock() - startTime) / CLOCKS_PER_SEC; //Update time elapsed
-        UpdateLevel_1(continueGame);
-        DrawLevel_1();
+        CalculateFPS();
+
+        Update(continueGame);
+        Draw();
+
+        Sleep(12); // 12 milisecs "=" 64 FPS aprox
     } while (continueGame && !playerLost);
 }
 
-void InitializeLevel_1(bool& continueGame, bool& playerLost)
+void Initialize(bool& continueGame, bool& playerLost)
 {
     continueGame = true;
     playerLost = false;
@@ -41,7 +48,7 @@ void InitializeLevel_1(bool& continueGame, bool& playerLost)
     PrintMatrix(levelMap, hConsole);
 }
 
-void UpdateLevel_1(bool& continueGame)
+void Update(bool& continueGame)
 {
     bool playerHasMoved = false;
     int inputChar = 0;
@@ -50,7 +57,7 @@ void UpdateLevel_1(bool& continueGame)
     if (_kbhit())
     {
         inputChar = _getch();
-        if (inputChar != 27)
+        if (inputChar != charEscapeKey)
         {
             ProcessPlayerMovement(playerHasMoved, player, levelMap, inputChar);
         }
@@ -100,7 +107,7 @@ void UpdateLevel_1(bool& continueGame)
     }
 }
 
-void DrawLevel_1()
+void Draw()
 {
     // Draw UI
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
@@ -112,4 +119,23 @@ void DrawLevel_1()
     // Draw time elapsed
     Gotoxy(timeInfoPosX, timeInfoPosY);
     cout << "Time: " << static_cast<int>(currentTime) << " sec";
+
+
+    Gotoxy(fpsInfoPosX, fpsInfoPosY);
+    cout << "FPS: " << static_cast<int>(fps) << "   ";
+}
+
+void CalculateFPS()
+{
+    // CLOCKS_PER_SEC = Time measured in processor cycles
+    currentTime = (clock() - startTime) / CLOCKS_PER_SEC; // Update time elapsed in seconds
+    frameCount++;
+    double elapsedTime = (clock() - lastTime) / CLOCKS_PER_SEC; // Calculate elapsed time since the last frame measurement
+    if (elapsedTime >= 1.0)
+    {
+        fps = frameCount;
+        frameCount = 0;     // Reset frame counter
+        lastTime = clock(); // Update base time
+    }
+
 }

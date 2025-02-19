@@ -26,7 +26,7 @@ void StartLevel_1(bool& continueGame, bool& playerLost)
         CalculateFPS();
         Update(continueGame);
         Draw();
-        Sleep(16); // 12 milisecs "=" 64 FPS aprox
+        Sleep(16); // 16 milisecs "=" 64 FPS aprox
     } while (continueGame && !playerLost);
 }
 

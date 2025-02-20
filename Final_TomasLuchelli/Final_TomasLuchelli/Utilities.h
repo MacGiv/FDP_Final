@@ -1,13 +1,14 @@
 #pragma once
+
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
 #include <ctime>
 #include <string>
+
 #include "GameData.h"
+
 using namespace std;
-
-
 
 //Hide cursor
 void HideCursor();
@@ -31,3 +32,5 @@ double GetTimeElapsed(double startTime);
 
 //Returns the cellType of a position given ('posRow' & 'posCol') of a matrix ('map')
 CellTypes GetCellType(cellStruct map[mapSizeRows][mapSizeCols], int posRow, int posCol);
+
+void CalculateFPS(double& startTime, double& currentTime, double& lastTime, int& frameCount, int& fps);

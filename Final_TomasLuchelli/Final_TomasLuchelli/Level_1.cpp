@@ -4,33 +4,35 @@ HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap[mapSizeRows][mapSizeCols];
 cellStruct player;
 bool endLevelConditionMet = false;
-double startTime = 0;
-double currentTime = 0;
-double lastTime = 0;    
-int fps = 0;            
-int frameCount = 0;    
+  
 
-void Initialize(bool& continueGame, bool& playerLost);
-void Update(bool& continueGame);
-void Draw();
+void Initialize_1(bool& continueGame, bool& playerLost);
+void Update_1(bool& continueGame);
+void Draw_1();
 
 void StartLevel_1(bool& continueGame, bool& playerLost)
 {
+    startTime = 0;
+    currentTime = 0;
+    lastTime = 0;
+    fps = 0;
+    frameCount = 0;
+
     srand(time(0));
     HideCursor();
-    Initialize(continueGame, playerLost);
+    Initialize_1(continueGame, playerLost);
     lastTime = clock();
 
     do
     {
-        CalculateFPS();
-        Update(continueGame);
-        Draw();
+        CalculateFPS(startTime, currentTime, lastTime, frameCount, fps);
+        Update_1(continueGame);
+        Draw_1();
         Sleep(16); // 16 milisecs "=" 64 FPS aprox
     } while (continueGame && !playerLost);
 }
 
-void Initialize(bool& continueGame, bool& playerLost)
+void Initialize_1(bool& continueGame, bool& playerLost)
 {
     continueGame = true;
     playerLost = false;
@@ -46,7 +48,7 @@ void Initialize(bool& continueGame, bool& playerLost)
     PrintMatrix(levelMap, hConsole);
 }
 
-void Update(bool& continueGame)
+void Update_1(bool& continueGame)
 {
     bool playerHasMoved = false;
     int inputChar = 0;
@@ -105,7 +107,7 @@ void Update(bool& continueGame)
     }
 }
 
-void Draw()
+void Draw_1()
 {
     // Draw UI
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
@@ -123,17 +125,4 @@ void Draw()
     cout << "FPS: " << static_cast<int>(fps) << "   ";
 }
 
-void CalculateFPS()
-{
-    // CLOCKS_PER_SEC = Time measured in processor cycles
-    currentTime = (clock() - startTime) / CLOCKS_PER_SEC; // Update time elapsed in seconds
-    frameCount++;
-    double elapsedTime = (clock() - lastTime) / CLOCKS_PER_SEC; // Calculate elapsed time since the last frame measurement
-    if (elapsedTime >= 1.0)
-    {
-        fps = frameCount;
-        frameCount = 0;     // Reset frame counter
-        lastTime = clock(); // Update base time
-    }
 
-}

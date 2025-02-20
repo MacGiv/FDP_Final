@@ -1,102 +1,128 @@
 #include "Level_2.h"
 
+HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
+cellStruct levelMap_2[mapSizeRows][mapSizeCols];
+cellStruct player_2;
+bool endLevelConditionMet_2 = false;
 
-void StartLevel_2()
+
+void Initialize_2(bool& continueGame, bool& playerLost);
+void Update_2(bool& continueGame);
+void Draw_2();
+
+void StartLevel_2(bool& continueGame, bool& playerLost)
 {
-	srand(time(0));
-	HideCursor();
+    startTime = 0;
+    currentTime = 0;
+    lastTime = 0;
+    fps = 0;
+    frameCount = 0;
+    
+    srand(time(0));
+    HideCursor();
+    Initialize_2(continueGame, playerLost);
+    lastTime = clock();
 
-	int levelNumber = 1;
-	bool continueGame = true;
-	double startTime = clock();
-	double currentTime = clock();
-	bool endLevelConditionMet = false;
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	cellStruct levelMap[mapSizeRows][mapSizeCols];
-	cellStruct player = InitializePlayer();
-
-	CreateStandardMap(levelMap);
-	levelMap[playerStartLevelPosY][playerStartLevelPosX] = player;
-	Gotoxy(mapStartPosX, mapStartPosY);
-	PrintMatrix(levelMap, hConsole);
-
-	//TODO: Draw UI
-
-	//Print level number
-	Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
-	cout << "Level: " << levelNumber;
-	//Print objetive
-	Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
-	cout << "Objetive: " << "Move the player to the exit using WASD.";
-
-	do
-	{
-		bool playerHasMoved = false;
-		bool playerHasAttacked = false;
-		char inputChar = 0;
-		AttackDirections attackDirection;
-
-		//Get input
-		if (_kbhit)
-		{
-			inputChar = _getch();
-			if (IsMovementInput)
-			{
-				ProcessPlayerMovement(playerHasMoved, player, levelMap, inputChar);
-			}
-			else if (IsAttackInput)
-			{
-				attackDirection = GetAttackDirection(inputChar);
-				PlayerAttack(levelMap, playerCurrentWeapon, attackDirection, playerHasAttacked);
-			}
-
-		}
-
-		//If player moved, Draw player 
-		if (playerHasMoved)
-		{
-			//If previous cell was ExitCell and player didn't met the condition put back to ExitCell
-			if (player.prevPosRow == exitLevelPosY && player.prevPosCol == exitLevelPosX)
-			{
-				Gotoxy(mapStartPosX + player.prevPosCol, mapStartPosY + player.prevPosRow);
-				levelMap[player.prevPosRow][player.prevPosCol].cellType = CellTypes::EXIT;
-				levelMap[player.prevPosRow][player.prevPosCol].cellChar = charExit;
-				SetConsoleTextAttribute(hConsole, colorExit);
-				cout << levelMap[player.prevPosRow][player.prevPosCol].cellChar;
-				SetConsoleTextAttribute(hConsole, 7);
-			}
-			else //Else = cell was a normal walkable one. Set normal walkable tile.
-			{
-				Gotoxy(mapStartPosX + player.prevPosCol, mapStartPosY + player.prevPosRow);
-				SetConsoleTextAttribute(hConsole, colorWalkable);
-				cout << charEmpty;
-				SetConsoleTextAttribute(hConsole, 7);
-				levelMap[player.prevPosRow][player.prevPosCol].cellType = CellTypes::WALKABLE;
-				levelMap[player.prevPosRow][player.prevPosCol].cellChar = charEmpty;
-			}
-
-			//Draw player pos
-			Gotoxy(mapStartPosX + player.posCol, mapStartPosY + player.posRow);
-			SetConsoleTextAttribute(hConsole, colorPlayer);
-			cout << player.cellChar;
-			SetConsoleTextAttribute(hConsole, 7);
-			levelMap[player.posRow][player.posCol].cellType = CellTypes::PLAYER;
-			levelMap[player.posRow][player.posCol].cellChar = charPlayer;
-
-			playerHasMoved = false;
-		}
-		else if (playerHasAttacked)
-		{
-			//Update attack logic
-			//Draw Attack
-		}
-
-		//Check win level condition
-		if (player.posRow == exitLevelPosY && player.posCol == exitLevelPosX)
-		{
-			continueGame = false;
-		}
-
-
-	} while (continueGame);
+    do
+    {
+        CalculateFPS(startTime, currentTime, lastTime, frameCount, fps);
+        Update_2(continueGame);
+        Draw_2();
+        Sleep(16); // 16 milisecs "=" 64 FPS aprox
+    } while (continueGame && !playerLost);
 }
+
+void Initialize_2(bool& continueGame, bool& playerLost)
+{
+    continueGame = true;
+    playerLost = false;
+    startTime = clock();
+    currentTime = 0;
+    endLevelConditionMet_2 = false;
+
+    player_2 = InitializePlayer();
+    CreateStandardMap(levelMap_2);
+    levelMap_2[playerStartLevelPosY][playerStartLevelPosX] = player_2;
+
+    Gotoxy(mapStartPosX, mapStartPosY);
+    PrintMatrix(levelMap_2, hConsole_2);
+}
+
+void Update_2(bool& continueGame)
+{
+    bool playerHasMoved = false;
+    int inputChar = 0;
+
+    // Get Player input
+    if (_kbhit())
+    {
+        inputChar = _getch();
+        if (inputChar != charEscapeKey)
+        {
+            ProcessPlayerMovement(playerHasMoved, player_2, levelMap_2, inputChar);
+        }
+        else
+        {
+            playerHasMoved = false;
+            continueGame = false;
+        }
+    }
+
+    // If player moved, update position
+    if (playerHasMoved)
+    {
+        Gotoxy(mapStartPosX + player_2.prevPosCol, mapStartPosY + player_2.prevPosRow);
+
+        if (player_2.prevPosRow == exitLevelPosY && player_2.prevPosCol == exitLevelPosX)
+        {
+            // Restore exit cell if player moved through
+            levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellType = CellTypes::EXIT;
+            levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar = charExit;
+            SetConsoleTextAttribute(hConsole_2, colorExit);
+            cout << levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar;
+        }
+        else
+        {
+            // Restore empty cell if player moved through one
+            SetConsoleTextAttribute(hConsole_2, colorWalkable);
+            cout << charEmpty;
+            levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellType = CellTypes::WALKABLE;
+            levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar = charEmpty;
+        }
+
+        // Draw player in new position
+        Gotoxy(mapStartPosX + player_2.posCol, mapStartPosY + player_2.posRow);
+        SetConsoleTextAttribute(hConsole_2, colorPlayer);
+        cout << player_2.cellChar;
+        levelMap_2[player_2.posRow][player_2.posCol].cellType = CellTypes::PLAYER;
+        levelMap_2[player_2.posRow][player_2.posCol].cellChar = charPlayer;
+        SetConsoleTextAttribute(hConsole_2, colorWall);
+        playerHasMoved = false;
+    }
+
+    // Check victory condition
+    if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
+    {
+        continueGame = false;
+    }
+}
+
+void Draw_2()
+{
+    // Draw UI
+    Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
+    cout << "Level: " << 2;
+
+    Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
+    cout << "Objective: Move the player to the exit using WASD. Press ESC to exit.";
+
+    // Draw time elapsed
+    Gotoxy(timeInfoPosX, timeInfoPosY);
+    cout << "Time: " << static_cast<int>(currentTime) << " sec";
+
+
+    Gotoxy(fpsInfoPosX, fpsInfoPosY);
+    cout << "FPS: " << static_cast<int>(fps) << "   ";
+}
+
+

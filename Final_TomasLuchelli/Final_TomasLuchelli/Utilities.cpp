@@ -211,3 +211,18 @@ CellTypes GetCellType(cellStruct map[mapSizeRows][mapSizeCols], int posRow, int 
 		break;
 	}
 }
+
+void CalculateFPS(double& startTime, double& currentTime, double& lastTime, int& frameCount, int& fps)
+{
+	// CLOCKS_PER_SEC = Time measured in processor cycles
+	currentTime = (clock() - startTime) / CLOCKS_PER_SEC; // Update time elapsed in seconds
+	frameCount++;
+	double elapsedTime = (clock() - lastTime) / CLOCKS_PER_SEC; // Calculate elapsed time since the last frame measurement
+	if (elapsedTime >= 1.0)
+	{
+		fps = frameCount;
+		frameCount = 0;     // Reset frame counter
+		lastTime = clock(); // Update base time
+	}
+
+}

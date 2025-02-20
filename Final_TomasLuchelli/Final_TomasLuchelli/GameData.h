@@ -1,6 +1,12 @@
 #pragma once
 
 
+extern double startTime;
+extern double currentTime;
+extern double lastTime;
+extern int fps;
+extern int frameCount;
+
 //Walls characters
 const char charWallTL = 201; // Top Left
 const char charWallTR = 187; // Top Right

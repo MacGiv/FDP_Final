@@ -4,4 +4,4 @@
 #include "Utilities.h";
 #include "Player.h";
 
-void StartLevel_2();
+void StartLevel_2(bool& continueGame, bool& playerLost);

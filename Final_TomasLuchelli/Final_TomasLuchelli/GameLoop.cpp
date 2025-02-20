@@ -1,5 +1,6 @@
 #include "GameLoop.h"
 #include "Level_1.h"
+#include "Level_2.h"
 
 void StartGame()
 {
@@ -13,6 +14,11 @@ void StartGame()
 		//Start Level 1 / Tutorial Movement & Exit Point
 		system("cls");
 		StartLevel_1(continueGame, playerLost);
+
+		if (!playerLost)
+		{
+			StartLevel_2(continueGame, playerLost);
+		}
 
 		//## Only For debugging ##
 		Gotoxy(endLevelMsgPosX, endLevelMsgPosY);

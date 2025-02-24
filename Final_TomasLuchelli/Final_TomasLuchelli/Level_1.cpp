@@ -14,14 +14,13 @@ void StartLevel_1(bool& continueGame, bool& playerLost)
 {
     startTime = 0;
     currentTime = 0;
-    lastTime = 0;
+    lastTime = clock();
     fps = 0;
     frameCount = 0;
 
     srand(time(0));
     HideCursor();
     Initialize_1(continueGame, playerLost);
-    lastTime = clock();
 
     do
     {

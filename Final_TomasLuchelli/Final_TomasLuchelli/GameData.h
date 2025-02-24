@@ -58,7 +58,7 @@ int const poleAxeAttacksPosAmount = 3;
 
 enum class LevelTypes { TUTORIAL, TRAPS, ENEMIES}; //TODO Used?
 
-enum class CellTypes {DEFAULT, WALKABLE, WALL, PLAYER, ENEMY, EXIT };
+enum class CellTypes {DEFAULT, WALKABLE, WALL, PLAYER, ENEMY, EXIT, PLAYER_ATTACK, ENEMY_ATTACK };
 
 enum class AttackDirections { NORTH, SOUTH, EAST, WEST };
 

@@ -4,9 +4,6 @@
 
 enum class Weapons {DAGGER = 1, SWORD, AXE, POLE, POLEAXE};
 
-int const playerBaseHP = 100;
-
-int extern playerHP;
 Weapons extern playerCurrentWeapon;
 
 cellStruct InitializePlayer();
@@ -24,7 +21,7 @@ bool IsAttackInput(char inputChar);
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar);
 
 //Player Attack
-void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, bool& playerHasAttacked);
+void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, int attackPositions[daggerAttacksPosAmount * 2], cellStruct playerCell);
 
 //Returns true if the attempted attack position is in range, otherwise returns false
 bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow, int attackPosCol);

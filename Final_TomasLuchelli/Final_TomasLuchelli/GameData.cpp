@@ -7,5 +7,3 @@ double currentTime = 0;
 double lastTime = 0;
 int fps = 0;
 int frameCount = 0;
-
-cellStruct playerCell;

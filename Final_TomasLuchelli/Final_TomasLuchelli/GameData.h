@@ -9,10 +9,11 @@ const char charWallH = 205;	 // Horizontal
 const char charWallV = 186;	 // Vertical
 
 //Colors
-const int colorWall = 7;		// White
-const int colorPlayer = 14;		// ¿Yellow / Orange?
-const int colorWalkable = 8;	// Gray
-const int colorExit = 11;		// Cyan
+const int colorWall = 7;		 // White
+const int colorPlayer = 14;		 // ¿Yellow / Orange?
+const int colorWalkable = 8;	 // Gray
+const int colorExit = 11;		 // Cyan
+const int colorPlayerAttack = 9; // Blue
 
 //Special Characters
 const char charPlayer = 233;
@@ -22,6 +23,8 @@ const char charEnemyBoss = 143;
 const char charExit = 'E';
 const char charEmpty = 249;
 const char charEscapeKey = 27;
+const char charPlayerAttack= 120;
+
 
 //Map and position related variables
 const int minPosMap = 0;
@@ -81,4 +84,3 @@ extern double currentTime;
 extern double lastTime;
 extern int fps;
 extern int frameCount;
-cellStruct extern playerCell;

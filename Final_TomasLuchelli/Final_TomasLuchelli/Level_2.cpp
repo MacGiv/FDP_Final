@@ -3,6 +3,10 @@
 HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap_2[mapSizeRows][mapSizeCols];
 cellStruct player_2;
+
+Weapons playerCurrentWeapon = Weapons::DAGGER;
+int attackPositionsArray[daggerAttacksPosAmount * 2];
+
 bool endLevelConditionMet_2 = false;
 
 
@@ -12,16 +16,15 @@ void Draw_2();
 
 void StartLevel_2(bool& continueGame, bool& playerLost)
 {
+    srand(time(0));
+    HideCursor();
     startTime = 0;
     currentTime = 0;
-    lastTime = 0;
+    lastTime = clock();
     fps = 0;
     frameCount = 0;
     
-    srand(time(0));
-    HideCursor();
     Initialize_2(continueGame, playerLost);
-    lastTime = clock();
 
     do
     {
@@ -51,7 +54,9 @@ void Initialize_2(bool& continueGame, bool& playerLost)
 void Update_2(bool& continueGame)
 {
     bool playerHasMoved = false;
-    int inputChar = 0;
+    bool playerHasAttacked = false;
+    AttackDirections attackDir = AttackDirections::NORTH;
+    char inputChar = 0;
 
     // Get Player input
     if (_kbhit())
@@ -59,7 +64,15 @@ void Update_2(bool& continueGame)
         inputChar = _getch();
         if (inputChar != charEscapeKey)
         {
-            ProcessPlayerMovement(playerHasMoved, player_2, levelMap_2, inputChar);
+            if (IsMovementInput(inputChar))
+            {
+                ProcessPlayerMovement(playerHasMoved, player_2, levelMap_2, inputChar);
+            }
+            else if (IsAttackInput(inputChar))
+            {
+                attackDir = GetAttackDirection(inputChar);
+                playerHasAttacked = true;
+            }
         }
         else
         {
@@ -89,7 +102,6 @@ void Update_2(bool& continueGame)
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellType = CellTypes::WALKABLE;
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar = charEmpty;
         }
-
         // Draw player in new position
         Gotoxy(mapStartPosX + player_2.posCol, mapStartPosY + player_2.posRow);
         SetConsoleTextAttribute(hConsole_2, colorPlayer);
@@ -99,6 +111,19 @@ void Update_2(bool& continueGame)
         SetConsoleTextAttribute(hConsole_2, colorWall);
         playerHasMoved = false;
     }
+    else if (playerHasAttacked)
+    {
+        PlayerDaggerAttack(levelMap_2, playerCurrentWeapon, attackDir, attackPositionsArray, player_2);
+        //Draw Attack
+        SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
+        Gotoxy(mapStartPosX + attackPositionsArray[1], mapStartPosY + attackPositionsArray[0]);
+        cout << charPlayerAttack;
+        SetConsoleTextAttribute(hConsole_2, colorWall);
+        playerHasAttacked = false;
+    }
+
+
+        
 
     // Check victory condition
     if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
@@ -123,6 +148,7 @@ void Draw_2()
 
     Gotoxy(fpsInfoPosX, fpsInfoPosY);
     cout << "FPS: " << static_cast<int>(fps) << "   ";
+
 }
 
 

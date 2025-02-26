@@ -4,7 +4,7 @@
 //The array 'attackPos' will hold the positions of the attacks in order following order:
 //Pos 0: row -> Pos 1: column -> Pos 2: row -> Pos 4: column -> etc 
 
-void GetAttackPositions(int attackPos[daggerAttacksPosAmount], AttackDirections direction, cellStruct playerStruct)
+void GetAttackPositions(int attackPos[daggerAttacksPosAmount*2], AttackDirections direction, cellStruct playerStruct)
 {
 	AttackPosition auxPos;
 	int i = 0;

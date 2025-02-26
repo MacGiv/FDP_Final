@@ -1,7 +1,6 @@
 #include "Player.h"
+#include "Weapons.h"
 
-int playerHP = playerBaseHP;
-Weapons playerCurrentWeapon = Weapons::DAGGER;
 
 cellStruct InitializePlayer()
 {
@@ -155,13 +154,17 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
-void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, bool& playerHasAttacked)
+void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, int attackPositions[daggerAttacksPosAmount*2], cellStruct playerCell)
 {
-	
 	switch (playerWeapon)
 	{
 	case Weapons::DAGGER:
-		//Chequear casillas
+		//Positions hardcoded because Dagger only attacks 1 pos (1 row and 1 col)
+		GetAttackPositions(attackPositions, attackDirection, playerCell);
+		if (IsAttackPossible(map, attackPositions[0], attackPositions[1]))
+		{
+			map[attackPositions[0]][attackPositions[1]].cellType = CellTypes::PLAYER_ATTACK;
+		}
 		
 		break;
 	case Weapons::SWORD:
@@ -236,7 +239,7 @@ bool IsAttackInput(char inputChar)
 	}
 }
 
-//Returns true if the attempted attack position is in range, otherwise returns false
+//Returns true if the attempted attack position is in range and an attackable cell, otherwise returns false
 bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow, int attackPosCol)
 {
 	bool inRange = false;

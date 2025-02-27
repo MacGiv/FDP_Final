@@ -1,12 +1,10 @@
 #include "Weapons.h"
 
 //These functions return the positions of the diferent attack types.
-//The array 'attackPos' will hold the positions of the attacks in order following order:
-//Pos 0: row -> Pos 1: column -> Pos 2: row -> Pos 4: column -> etc 
 
-void GetAttackPositions(int attackPos[daggerAttacksPosAmount*2], AttackDirections direction, cellStruct playerStruct)
+void GetAttackPositions(attackPosition attackPos[daggerAttacksPosAmount], AttackDirections direction, cellStruct playerStruct)
 {
-	AttackPosition auxPos;
+	attackPosition auxPos;
 	int i = 0;
 	
 	for (i = 0; i < daggerAttacksPosAmount; i++)
@@ -33,9 +31,7 @@ void GetAttackPositions(int attackPos[daggerAttacksPosAmount*2], AttackDirection
 			break;
 		}
 
-		attackPos[i] = auxPos.row;
-		i++;
-		attackPos[i] = auxPos.col;
+		attackPos[i] = auxPos;
 	}
 	
 }

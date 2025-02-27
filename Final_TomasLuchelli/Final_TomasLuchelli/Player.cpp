@@ -154,16 +154,15 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
-void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, int attackPositions[daggerAttacksPosAmount*2], cellStruct playerCell)
+void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
 	switch (playerWeapon)
 	{
 	case Weapons::DAGGER:
-		//Positions hardcoded because Dagger only attacks 1 pos (1 row and 1 col)
-		GetAttackPositions(attackPositions, attackDirection, playerCell);
-		if (IsAttackPossible(map, attackPositions[0], attackPositions[1]))
+		GetAttackPositions(attackPos, attackDirection, playerCell);
+		if (IsAttackPossible(map, attackPos[0].row, attackPos[0].col))
 		{
-			map[attackPositions[0]][attackPositions[1]].cellType = CellTypes::PLAYER_ATTACK;
+			map[attackPos[0].row][attackPos[0].col].cellType = CellTypes::PLAYER_ATTACK;
 		}
 		
 		break;
@@ -245,8 +244,8 @@ bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow
 	bool inRange = false;
 	bool canAttackCellType = false;
 
-	bool isInRowsRange = (attackPosRow < mapSizeRows && attackPosRow >= minPosMap);
-	bool isInColsRange = (attackPosCol < mapSizeCols && attackPosCol >= minPosMap);
+	bool isInRowsRange = (attackPosRow <= mapSizeRows && attackPosRow >= minPosMap);
+	bool isInColsRange = (attackPosCol <= mapSizeCols && attackPosCol >= minPosMap);
 	
 	if (isInRowsRange && isInColsRange)
 		inRange = true;

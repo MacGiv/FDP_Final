@@ -154,7 +154,7 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
-void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
+void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
 	switch (playerWeapon)
 	{

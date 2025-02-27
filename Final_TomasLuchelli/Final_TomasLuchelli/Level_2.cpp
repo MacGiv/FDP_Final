@@ -116,7 +116,7 @@ void Update_2(bool& continueGame)
     }
     else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
     {
-        PlayerDaggerAttack(levelMap_2, playerCurrentWeapon, attackDir, attackPositionsArray, player_2);
+        PlayerAttack(levelMap_2, playerCurrentWeapon, attackDir, attackPositionsArray, player_2);
         //Draw Attack
         SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
         Gotoxy(mapStartPosX + attackPositionsArray[0].col, mapStartPosY + attackPositionsArray[0].row);

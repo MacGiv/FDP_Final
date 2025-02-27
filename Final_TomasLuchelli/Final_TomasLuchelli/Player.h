@@ -21,7 +21,7 @@ bool IsAttackInput(char inputChar);
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar);
 
 //Player Attack
-void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell);
+void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell);
 
 //Returns true if the attempted attack position is in range, otherwise returns false
 bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow, int attackPosCol);

@@ -150,37 +150,34 @@ AttackDirections GetAttackDirection(int inputChar)
 		return AttackDirections::EAST;
 		break;
 	default:
+		return AttackDirections::WEST;
 		break;
 	}
 }
 
-void PlayerDaggerAttack(cellStruct map[mapSizeRows][mapSizeCols], Weapons playerWeapon, AttackDirections attackDirection, int attackPositions[daggerAttacksPosAmount*2], cellStruct playerCell)
+void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
-	switch (playerWeapon)
+	GetAttackPositions(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < daggerAttacksPosAmount; i++)
 	{
-	case Weapons::DAGGER:
-		//Positions hardcoded because Dagger only attacks 1 pos (1 row and 1 col)
-		GetAttackPositions(attackPositions, attackDirection, playerCell);
-		if (IsAttackPossible(map, attackPositions[0], attackPositions[1]))
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
 		{
-			map[attackPositions[0]][attackPositions[1]].cellType = CellTypes::PLAYER_ATTACK;
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
 		}
-		
-		break;
-	case Weapons::SWORD:
+	}
+}
 
-		break;
-	case Weapons::AXE:
-
-		break;
-	case Weapons::POLE:
-
-		break;
-	case Weapons::POLEAXE:
-
-		break;
-	default:
-		break;
+void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
+{
+	GetAttackPositions(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < swordAttacksPosAmount; i++)
+	{
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
+		{
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
+		}
 	}
 }
 
@@ -240,13 +237,15 @@ bool IsAttackInput(char inputChar)
 }
 
 //Returns true if the attempted attack position is in range and an attackable cell, otherwise returns false
-bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow, int attackPosCol)
+void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], attackPosition& attackPos)
 {
 	bool inRange = false;
 	bool canAttackCellType = false;
+	bool isInRowsRange = false;
+	bool isInColsRange = false;
 
-	bool isInRowsRange = (attackPosRow < mapSizeRows && attackPosRow >= minPosMap);
-	bool isInColsRange = (attackPosCol < mapSizeCols && attackPosCol >= minPosMap);
+	isInRowsRange = (attackPos.row <= (mapSizeRows - 1) && attackPos.row >= (minPosMap + 1));
+	isInColsRange = (attackPos.col <= (mapSizeCols - 1) && attackPos.col >= (minPosMap + 1));
 	
 	if (isInRowsRange && isInColsRange)
 		inRange = true;
@@ -255,30 +254,30 @@ bool IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], int attackPosRow
 
 	if (inRange)
 	{
-		switch (map[attackPosRow][attackPosCol].cellType)
+		switch (map[attackPos.row][attackPos.col].cellType)
 		{
 		case CellTypes::DEFAULT:
-			return false;
+			attackPos.attackPossible = false;
 			break;
 		case CellTypes::WALKABLE:
-			return true;
+			attackPos.attackPossible = true;
 			break;
 		case CellTypes::WALL:
-			return false;
+			attackPos.attackPossible = false;
 			break;
 		case CellTypes::ENEMY:
-			return true;
+			attackPos.attackPossible = true;
 			break;
 		case CellTypes::EXIT:
-			return false;
+			attackPos.attackPossible = false;
 			break;
 		default:
-			return false;
+			attackPos.attackPossible = false;
 			break;
 		}
 	}
 	else
 	{
-		return false;
+		attackPos.attackPossible = false;
 	}
 }

@@ -10,7 +10,7 @@ const char charWallV = 186;	 // Vertical
 
 //Colors
 const int colorWall = 7;		 // White
-const int colorPlayer = 14;		 // ¿Yellow / Orange?
+const int colorPlayer = 14;		 // Yellow
 const int colorWalkable = 8;	 // Gray
 const int colorExit = 11;		 // Cyan
 const int colorPlayerAttack = 9; // Blue
@@ -76,6 +76,12 @@ struct cellStruct
 	int prevPosCol = 0;
 };
 
+struct attackPosition
+{
+	int row = 0;
+	int col = 0;
+	bool attackPossible = false;
+};
 
 //Externs
 extern int playerLevelProgress;

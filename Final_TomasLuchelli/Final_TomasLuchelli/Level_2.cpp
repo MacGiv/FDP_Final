@@ -4,11 +4,17 @@ HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap_2[mapSizeRows][mapSizeCols];
 cellStruct player_2;
 
-Weapons playerCurrentWeapon = Weapons::DAGGER;
-int attackPositionsArray[daggerAttacksPosAmount * 2];
+//Weapons playerCurrentWeapon = Weapons::DAGGER;
+//attackPosition attackPositionsArray[daggerAttacksPosAmount];
+Weapons playerCurrentWeapon = Weapons::SWORD;
+attackPosition attackPositionsArray[swordAttacksPosAmount];
+
+double lastAttackTime = 999;
+double attackDurationTime = 0.3;
+int currentActiveAttacks = 0;
+const int maxPlayerAttacks = 1;
 
 bool endLevelConditionMet_2 = false;
-
 
 void Initialize_2(bool& continueGame, bool& playerLost);
 void Update_2(bool& continueGame);
@@ -86,17 +92,17 @@ void Update_2(bool& continueGame)
     {
         Gotoxy(mapStartPosX + player_2.prevPosCol, mapStartPosY + player_2.prevPosRow);
 
+        // Restore exit cell if player moved through
         if (player_2.prevPosRow == exitLevelPosY && player_2.prevPosCol == exitLevelPosX)
         {
-            // Restore exit cell if player moved through
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellType = CellTypes::EXIT;
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar = charExit;
             SetConsoleTextAttribute(hConsole_2, colorExit);
             cout << levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar;
         }
+        // Restore empty cell if player moved through one
         else
         {
-            // Restore empty cell if player moved through one
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
             cout << charEmpty;
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellType = CellTypes::WALKABLE;
@@ -111,19 +117,41 @@ void Update_2(bool& continueGame)
         SetConsoleTextAttribute(hConsole_2, colorWall);
         playerHasMoved = false;
     }
-    else if (playerHasAttacked)
+    else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
     {
-        PlayerDaggerAttack(levelMap_2, playerCurrentWeapon, attackDir, attackPositionsArray, player_2);
+        PlayerAttack(levelMap_2, attackDir, attackPositionsArray, player_2);
         //Draw Attack
-        SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-        Gotoxy(mapStartPosX + attackPositionsArray[1], mapStartPosY + attackPositionsArray[0]);
-        cout << charPlayerAttack;
-        SetConsoleTextAttribute(hConsole_2, colorWall);
+        for (int i = 0; i < daggerAttacksPosAmount; i++)
+        {
+            if (attackPositionsArray[i].attackPossible)
+            {
+                SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
+                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                cout << charPlayerAttack;
+                SetConsoleTextAttribute(hConsole_2, colorWall);
+            }
+        }
+        currentActiveAttacks = 1;
         playerHasAttacked = false;
+        lastAttackTime = currentTime;
     }
 
-
-        
+    // Restore attack cells
+    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
+    {
+        for (int i = 0; i < daggerAttacksPosAmount; i++)
+        {
+            if (attackPositionsArray[i].attackPossible)
+            {
+                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
+                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                cout << charEmpty;
+                SetConsoleTextAttribute(hConsole_2, colorWall);
+            }
+        }
+        currentActiveAttacks = 0;
+    }
 
     // Check victory condition
     if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
@@ -139,7 +167,7 @@ void Draw_2()
     cout << "Level: " << 2;
 
     Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
-    cout << "Objective: Move the player to the exit using WASD. Press ESC to exit.";
+    cout << "Objective: Move the player to the exit using WASD. Attack with IJKL. Press ESC to exit.";
 
     // Draw time elapsed
     Gotoxy(timeInfoPosX, timeInfoPosY);

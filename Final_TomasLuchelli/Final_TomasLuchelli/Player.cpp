@@ -155,9 +155,9 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
-void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
+void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
-	GetAttackPositions(attackPos, attackDirection, playerCell);
+	GetAttackPositionsDagger(attackPos, attackDirection, playerCell);
 	for (int i = 0; i < daggerAttacksPosAmount; i++)
 	{
 		IsAttackPossible(map, attackPos[i]);
@@ -168,18 +168,6 @@ void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections att
 	}
 }
 
-void PlayerAttack(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
-{
-	GetAttackPositions(attackPos, attackDirection, playerCell);
-	for (int i = 0; i < swordAttacksPosAmount; i++)
-	{
-		IsAttackPossible(map, attackPos[i]);
-		if (attackPos[i].attackPossible)
-		{
-			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
-		}
-	}
-}
 
 //Returns true if inputChar is W, A, S, or D
 bool IsMovementInput(char inputChar)

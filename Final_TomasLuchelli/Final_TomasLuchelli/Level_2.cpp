@@ -119,7 +119,7 @@ void Update_2(bool& continueGame)
     }
     else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
     {
-        PlayerAttack(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackDagger(levelMap_2, attackDir, attackPositionsArray, player_2);
         //Draw Attack
         for (int i = 0; i < daggerAttacksPosAmount; i++)
         {

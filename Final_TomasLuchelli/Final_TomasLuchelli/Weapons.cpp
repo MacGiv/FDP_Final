@@ -2,7 +2,7 @@
 
 //These functions return the positions of the diferent attack types.
 
-void GetAttackPositions(attackPosition attackPos[daggerAttacksPosAmount], AttackDirections direction, cellStruct playerStruct)
+void GetAttackPositionsDagger(attackPosition attackPos[daggerAttacksPosAmount], AttackDirections direction, cellStruct playerStruct)
 {
 	attackPosition auxPos;
 	int i = 0;

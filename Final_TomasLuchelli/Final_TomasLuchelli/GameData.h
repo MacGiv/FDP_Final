@@ -80,6 +80,7 @@ struct attackPosition
 {
 	int row = 0;
 	int col = 0;
+	bool attackPossible = false;
 };
 
 //Externs

@@ -35,29 +35,3 @@ void GetAttackPositions(attackPosition attackPos[daggerAttacksPosAmount], Attack
 	}
 	
 }
-
-/*
-void GetAttackPositions(int attackPos[swordAttacksPosAmount], AttackDirections direction)
-{
-	AttackPosition auxPos;
-
-}
-
-void GetAttackPositions(int attackPos[axeAttacksPosAmount], AttackDirections direction)
-{
-	AttackPosition auxPos;
-
-}
-
-void GetAttackPositions(int attackPos[poleAttacksPosAmount], AttackDirections direction)
-{
-	AttackPosition auxPos;
-
-}
-
-void GetAttackPositions(int attackPos[poleAxeAttacksPosAmount], AttackDirections direction)
-{
-	AttackPosition auxPos;
-
-}
-*/

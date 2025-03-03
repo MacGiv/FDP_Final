@@ -12,12 +12,15 @@ attackPosition attackPositionsArray[swordAttacksPosAmount];
 double lastAttackTime = 999;
 double attackDurationTime = 0.3;
 int currentActiveAttacks = 0;
-const int maxPlayerAttacks = 1;
+int maxPlayerAttacks = 1;
 
 bool endLevelConditionMet_2 = false;
 
 void Initialize_2(bool& continueGame, bool& playerLost);
 void Update_2(bool& continueGame);
+void DrawPlayer_2();
+void ResetPlayerAttackCells();
+void ProcessPlayerAttack(AttackDirections attackDir);
 void Draw_2();
 
 void StartLevel_2(bool& continueGame, bool& playerLost)
@@ -48,6 +51,24 @@ void Initialize_2(bool& continueGame, bool& playerLost)
     startTime = clock();
     currentTime = 0;
     endLevelConditionMet_2 = false;
+
+    switch (playerCurrentWeapon)
+    {
+    case Weapons::DAGGER:
+        maxPlayerAttacks = daggerAttacksPosAmount;
+        break;
+    case Weapons::SWORD:
+        maxPlayerAttacks = swordAttacksPosAmount;
+        break;
+    case Weapons::AXE:
+        break;
+    case Weapons::POLE:
+        break;
+    case Weapons::POLEAXE:
+        break;
+    default:
+        break;
+    }
 
     player_2 = InitializePlayer();
     CreateStandardMap(levelMap_2);
@@ -109,16 +130,88 @@ void Update_2(bool& continueGame)
             levelMap_2[player_2.prevPosRow][player_2.prevPosCol].cellChar = charEmpty;
         }
         // Draw player in new position
-        Gotoxy(mapStartPosX + player_2.posCol, mapStartPosY + player_2.posRow);
-        SetConsoleTextAttribute(hConsole_2, colorPlayer);
-        cout << player_2.cellChar;
-        levelMap_2[player_2.posRow][player_2.posCol].cellType = CellTypes::PLAYER;
-        levelMap_2[player_2.posRow][player_2.posCol].cellChar = charPlayer;
-        SetConsoleTextAttribute(hConsole_2, colorWall);
+        DrawPlayer_2();
         playerHasMoved = false;
     }
     else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
     {
+        ProcessPlayerAttack(attackDir);
+        playerHasAttacked = false;
+        lastAttackTime = currentTime;
+    }
+
+    // Restore attack cells
+    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
+    {
+        ResetPlayerAttackCells();
+    }
+
+    // Check victory condition
+    if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
+    {
+        continueGame = false;
+    }
+}
+
+void DrawPlayer_2()
+{
+    Gotoxy(mapStartPosX + player_2.posCol, mapStartPosY + player_2.posRow);
+    SetConsoleTextAttribute(hConsole_2, colorPlayer);
+    cout << player_2.cellChar;
+    levelMap_2[player_2.posRow][player_2.posCol].cellType = CellTypes::PLAYER;
+    levelMap_2[player_2.posRow][player_2.posCol].cellChar = charPlayer;
+    SetConsoleTextAttribute(hConsole_2, colorWall);
+}
+
+void ResetPlayerAttackCells()
+{
+    switch (playerCurrentWeapon)
+    {
+    case Weapons::DAGGER:
+        for (int i = 0; i < daggerAttacksPosAmount; i++)
+        {
+            if (attackPositionsArray[i].attackPossible)
+            {
+                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
+                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                cout << charEmpty;
+                SetConsoleTextAttribute(hConsole_2, colorWall);
+            }
+        }
+        break;
+    case Weapons::SWORD:
+        for (int i = 0; i < swordAttacksPosAmount; i++)
+        {
+            if (attackPositionsArray[i].attackPossible)
+            {
+                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
+                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                cout << charEmpty;
+                SetConsoleTextAttribute(hConsole_2, colorWall);
+            }
+        }
+        break;
+    case Weapons::AXE:
+        break;
+    case Weapons::POLE:
+        break;
+    case Weapons::POLEAXE:
+        break;
+    default:
+        break;
+    }
+
+    
+    currentActiveAttacks = 0;
+}
+
+void ProcessPlayerAttack(AttackDirections attackDir)
+{
+    switch (playerCurrentWeapon)
+    {
+    case Weapons::DAGGER:
         PlayerAttackDagger(levelMap_2, attackDir, attackPositionsArray, player_2);
         //Draw Attack
         for (int i = 0; i < daggerAttacksPosAmount; i++)
@@ -131,33 +224,34 @@ void Update_2(bool& continueGame)
                 SetConsoleTextAttribute(hConsole_2, colorWall);
             }
         }
-        currentActiveAttacks = 1;
-        playerHasAttacked = false;
-        lastAttackTime = currentTime;
-    }
-
-    // Restore attack cells
-    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
-    {
-        for (int i = 0; i < daggerAttacksPosAmount; i++)
+        currentActiveAttacks = daggerAttacksPosAmount;
+        break;
+    case Weapons::SWORD:
+        PlayerAttackSword(levelMap_2, attackDir, attackPositionsArray, player_2);
+        //Draw Attack
+        for (int i = 0; i < swordAttacksPosAmount; i++)
         {
             if (attackPositionsArray[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
-                SetConsoleTextAttribute(hConsole_2, colorWalkable);
+                SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
                 Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
-                cout << charEmpty;
+                cout << charPlayerAttack;
                 SetConsoleTextAttribute(hConsole_2, colorWall);
             }
         }
-        currentActiveAttacks = 0;
+        currentActiveAttacks = swordAttacksPosAmount;
+        break;
+    case Weapons::AXE:
+        break;
+    case Weapons::POLE:
+        break;
+    case Weapons::POLEAXE:
+        break;
+    default:
+        break;
     }
-
-    // Check victory condition
-    if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
-    {
-        continueGame = false;
-    }
+    
+    
 }
 
 void Draw_2()

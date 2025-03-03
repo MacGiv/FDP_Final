@@ -168,6 +168,19 @@ void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirectio
 	}
 }
 
+void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
+{
+	GetAttackPositionsSword(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < swordAttacksPosAmount; i++)
+	{
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
+		{
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
+		}
+	}
+}
+
 
 //Returns true if inputChar is W, A, S, or D
 bool IsMovementInput(char inputChar)
@@ -224,7 +237,7 @@ bool IsAttackInput(char inputChar)
 	}
 }
 
-//Returns true if the attempted attack position is in range and an attackable cell, otherwise returns false
+// Checks if the attempted attack is in range and puts the bool attackPossible in attackPosition's struct in true/false
 void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], attackPosition& attackPos)
 {
 	bool inRange = false;

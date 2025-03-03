@@ -10,16 +10,18 @@ cellStruct InitializePlayer();
 
 AttackDirections GetAttackDirection(int inputChar);
 
-//Returns true if inputChar is W, A, S, or D
+// Returns true if inputChar is W, A, S, or D
 bool IsMovementInput(char inputChar);
 
-//Returns true if inputChar is I, J, K, or L
+// Returns true if inputChar is I, J, K, or L
 bool IsAttackInput(char inputChar);
 
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar);
 
-//Player Dagger Attack
+// Player Attacks
 void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell);
+
+void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell);
 
 // Checks if the attempted attack position is in range, otherwise returns false
 void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], attackPosition& attackPos);

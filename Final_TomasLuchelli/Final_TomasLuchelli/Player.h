@@ -23,5 +23,5 @@ void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirectio
 
 void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell);
 
-// Checks if the attempted attack position is in range, otherwise returns false
+// Checks if the attempted attack is in range and puts the bool attackPossible in attackPosition's struct in true/false
 void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], attackPosition& attackPos);

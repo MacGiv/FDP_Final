@@ -34,6 +34,7 @@ void StartLevel_2(bool& continueGame, bool& playerLost)
     frameCount = 0;
     
     Initialize_2(continueGame, playerLost);
+    attackPosition attackPositionsArray[swordAttacksPosAmount];
 
     do
     {
@@ -52,6 +53,7 @@ void Initialize_2(bool& continueGame, bool& playerLost)
     currentTime = 0;
     endLevelConditionMet_2 = false;
 
+    // Initialize attack positions array
     switch (playerCurrentWeapon)
     {
     case Weapons::DAGGER:

@@ -127,7 +127,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Enemies.cpp" />
+    <ClCompile Include="Enemy_1.cpp" />
     <ClCompile Include="GameData.cpp" />
     <ClCompile Include="GameLoop.cpp" />
     <ClCompile Include="Level_1.cpp" />
@@ -139,7 +139,7 @@
     <ClCompile Include="Weapons.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Enemies.h" />
+    <ClInclude Include="Enemy_1.h" />
     <ClInclude Include="GameData.h" />
     <ClInclude Include="GameLoop.h" />
     <ClInclude Include="Level_1.h" />

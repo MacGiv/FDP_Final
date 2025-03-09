@@ -155,7 +155,7 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
-void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
+void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
 	GetAttackPositionsDagger(attackPos, attackDirection, playerCell);
 	for (int i = 0; i < daggerAttacksPosAmount; i++)
@@ -168,7 +168,7 @@ void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirectio
 	}
 }
 
-void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, attackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
+void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
 {
 	GetAttackPositionsSword(attackPos, attackDirection, playerCell);
 	for (int i = 0; i < swordAttacksPosAmount; i++)
@@ -238,7 +238,7 @@ bool IsAttackInput(char inputChar)
 }
 
 // Checks if the attempted attack is in range and puts the bool attackPossible in attackPosition's struct in true/false
-void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], attackPosition& attackPos)
+void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], playerAttackPosition& attackPos)
 {
 	bool inRange = false;
 	bool canAttackCellType = false;

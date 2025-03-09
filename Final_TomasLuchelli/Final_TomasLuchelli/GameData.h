@@ -13,6 +13,7 @@ const int colorWall = 7;		 // White
 const int colorPlayer = 14;		 // Yellow
 const int colorWalkable = 8;	 // Gray
 const int colorExit = 11;		 // Cyan
+const int colorEnemy = 12;		 // Red
 const int colorPlayerAttack = 9; // Blue
 
 //Special Characters
@@ -24,6 +25,8 @@ const char charExit = 'E';
 const char charEmpty = 249;
 const char charEscapeKey = 27;
 const char charPlayerAttack= 120;
+const char charEnemyAttack= 120;
+
 
 
 //Map and position related variables
@@ -76,7 +79,7 @@ struct cellStruct
 	int prevPosCol = 0;
 };
 
-struct attackPosition
+struct playerAttackPosition
 {
 	int row = 0;
 	int col = 0;

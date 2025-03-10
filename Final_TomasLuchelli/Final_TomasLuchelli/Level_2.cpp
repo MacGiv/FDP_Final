@@ -3,12 +3,14 @@
 
 HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap_2[mapSizeRows][mapSizeCols];
-cellStruct player_2;
 
+cellStruct player_2;
 //Weapons playerCurrentWeapon = Weapons::DAGGER;
 //attackPosition attackPositionsArray[daggerAttacksPosAmount];
 Weapons playerCurrentWeapon = Weapons::SWORD;
 playerAttackPosition attackPositionsArray[swordAttacksPosAmount];
+int playerHp = 100;
+bool hitReceived = false;
 
 // Player's attack variables
 double lastAttackTime = 999;
@@ -17,24 +19,28 @@ int currentActiveAttacks = 0;
 int maxPlayerAttacks = 1;
 
 // Enemies variables
+int enemyDamage = 50;
 int totalEnemies = 1;
 int const maxEnemies = 1;
-int const maxEnemyActiveAttacks = maxEnemies * 4; 
+int const maxEnemyActiveAttacks = maxEnemyAttacksP1; 
 enemyAttackPosition enemyAttackPosArray[maxEnemyActiveAttacks];
 EnemyCell enemiesArray[maxEnemies];
 double lastEnemyMoveTime = 0;
 double enemyMoveInterval = 0.7;
-
+double lastEnemyAttackTime = 1;
+double enemyAttackInterval = 1;
 
 bool endLevelConditionMet_2 = false;
 
 void Initialize_2(bool& continueGame, bool& playerLost);
 void InitializeEnemies_2();
-void Update_2(bool& continueGame);
-void ResetPlayerAttackCells();
+void Update_2(bool& continueGame, bool& playerLost);
+void DrawEnemyAttack();
 void ProcessPlayerAttack(AttackDirections attackDir);
 void DrawPlayer_2();
+void ResetPlayerAttackCells();
 void ResetEnemyPrevMovementCell(EnemyCell& tempEnemy);
+void ResetEnemyAttackCells();
 void DrawUi_2();
 void Debug_DrawMap();
 void DrawEnemies(EnemyCell enemies[maxEnemies]);
@@ -56,10 +62,10 @@ void StartLevel_2(bool& continueGame, bool& playerLost)
     do
     {
         CalculateFPS(startTime, currentTime, lastTime, frameCount, fps);
-        Update_2(continueGame);
+        Update_2(continueGame, playerLost);
         DrawEnemies(enemiesArray);
         DrawUi_2();
-        Sleep(16); // 16 milisecs "=" 64 FPS aprox
+        Sleep(16);
     } while (continueGame && !playerLost);
 }
 
@@ -70,7 +76,8 @@ void Initialize_2(bool& continueGame, bool& playerLost)
     startTime = clock();
     currentTime = 0;
     endLevelConditionMet_2 = false;
-
+    playerHp = 100;
+    hitReceived = false;
     // Initialize attack positions array
     switch (playerCurrentWeapon)
     {
@@ -102,6 +109,12 @@ void Initialize_2(bool& continueGame, bool& playerLost)
 
 void InitializeEnemies_2()
 {
+    for (int i = 0; i < maxPlayerAttacks; i++)
+    {
+        enemyAttackPosArray[i].row = 0;
+        enemyAttackPosArray[i].col = 0;
+        enemyAttackPosArray[i].isActive = false;
+    }
     for (int i = 0; i < maxEnemies; i++)
     { 
         InitializeEnemy(enemiesArray[i], player_2.posRow, player_2.posCol + (mapSizeCols / 2));
@@ -110,7 +123,7 @@ void InitializeEnemies_2()
     }
 }
 
-void Update_2(bool& continueGame)
+void Update_2(bool& continueGame, bool& playerLost)
 {
     bool playerHasMoved = false;
     bool playerHasAttacked = false;
@@ -140,7 +153,7 @@ void Update_2(bool& continueGame)
         }
     }
 
-    // If player moved, update position
+    // Player Movement
     if (playerHasMoved)
     {
         Gotoxy(mapStartPosX + player_2.prevPosCol, mapStartPosY + player_2.prevPosRow);
@@ -165,19 +178,24 @@ void Update_2(bool& continueGame)
         DrawPlayer_2();
         playerHasMoved = false;
     }
+    // Player Attack
     else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
     {
         ProcessPlayerAttack(attackDir);
         playerHasAttacked = false;
-        lastAttackTime = currentTime;
-        // // ################### Enemy movement ###################
-        // for (int i = 0; i < maxEnemies; i++)
-        // {
-        //     EnemyMoveUp(enemiesArray[i], levelMap_2);
-        // }
-        // Debug_DrawMap();
-        // // ######################################################
-        
+        lastAttackTime = currentTime;        
+    }
+
+    // Reset enemy attack cells
+    if (currentTime > lastEnemyAttackTime + attackDurationTime)
+    {
+        ResetEnemyAttackCells();
+        hitReceived = false;
+    }
+    // Reset player attack cells
+    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
+    {
+        ResetPlayerAttackCells();
     }
 
     // Enemy Move
@@ -192,13 +210,37 @@ void Update_2(bool& continueGame)
             }
         }
         lastEnemyMoveTime = currentTime;
-        Debug_DrawMap();
+        //Debug_DrawMap();
+    }
+    // Enemy Attack
+    else if (currentTime > lastEnemyAttackTime + enemyAttackInterval)
+    {
+        for (int i = 0; i < maxEnemies; i++)
+        {
+            if (enemiesArray[i].isAlive)
+            {
+                EnemyAttack(enemiesArray[i], levelMap_2, enemiesArray[i].attackType, enemyAttackPosArray);
+            }
+        }
+        lastEnemyAttackTime = currentTime;
     }
 
-    // Restore attack cells
-    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
+    // Check for player damage
+    if (!hitReceived)
     {
-        ResetPlayerAttackCells();
+        for (int i = 0; i < maxEnemyActiveAttacks; i++)
+        {
+            if (enemyAttackPosArray[i].isActive && player_2.posRow == enemyAttackPosArray[i].row && player_2.posCol == enemyAttackPosArray[i].col)
+            {
+                playerHp -= 50;
+                hitReceived = true;
+                if (playerHp <= 0)
+                {
+                    playerLost = true;
+                    ResetEnemyAttackCells();
+                }
+            }
+        }
     }
 
     // Check victory condition
@@ -208,8 +250,27 @@ void Update_2(bool& continueGame)
     }
 }
 
+void DrawEnemyAttack()
+{
+    for (int i = 0; i < maxEnemyActiveAttacks; i++)
+    {
+        if (enemyAttackPosArray[i].isActive)
+        {
+            SetConsoleTextAttribute(hConsole_2, colorEnemy);
+            Gotoxy(mapStartPosX + enemyAttackPosArray[i].col, mapStartPosY + enemyAttackPosArray[i].row);
+            cout << charEnemyAttack;
+            SetConsoleTextAttribute(hConsole_2, colorWalkable); // Vuelve al color por defecto
+        }
+    }
+}
+
 void DrawUi_2()
 {
+    DrawPlayer_2();
+    
+    DrawEnemyAttack();
+
+    SetConsoleTextAttribute(hConsole_2, colorWall);
     // Draw UI
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
     cout << "Level: " << 2;
@@ -220,14 +281,27 @@ void DrawUi_2()
     // Draw time elapsed
     Gotoxy(timeInfoPosX, timeInfoPosY);
     cout << "Time: " << static_cast<int>(currentTime) << " sec";
-
-
+    // Draw FPS
     Gotoxy(fpsInfoPosX, fpsInfoPosY);
     cout << "FPS: " << static_cast<int>(fps) << "   ";
+    // Draw Player's HP
+    if (playerHp < 100)
+    {
+        Gotoxy(playerHpPosX, playerHpPosY);
+        cout << "HP:  " << playerHp;
+    }
+    else
+    {
+        Gotoxy(playerHpPosX, playerHpPosY);
+        cout << "HP: " << playerHp;
+    }
+    
 
     //DEBUG
     Debug_DrawMap();
     //END DEBUG
+
+    SetConsoleTextAttribute(hConsole_2, colorWalkable);
 
 }
 
@@ -268,7 +342,25 @@ void ResetEnemyPrevMovementCell(EnemyCell& tempEnemy)
     SetConsoleTextAttribute(hConsole_2, colorWalkable);
     Gotoxy(mapStartPosX + tempEnemy.cell.prevPosCol, mapStartPosY + tempEnemy.cell.prevPosRow);
     cout << charEmpty;
-    SetConsoleTextAttribute(hConsole_2, colorWall);
+    SetConsoleTextAttribute(hConsole_2, colorWalkable);
+}
+
+void ResetEnemyAttackCells()
+{
+    for (int i = 0; i < maxEnemyActiveAttacks; i++)
+    {
+        if (enemyAttackPosArray[i].isActive)
+        {
+            enemyAttackPosArray[i].isActive = false;
+            levelMap_2[enemyAttackPosArray[i].row][enemyAttackPosArray[i].col].cellType = CellTypes::WALKABLE;
+            SetConsoleTextAttribute(hConsole_2, colorWalkable);
+            Gotoxy(mapStartPosX + enemyAttackPosArray[i].col, mapStartPosY + enemyAttackPosArray[i].row);
+            cout << charEmpty;
+            SetConsoleTextAttribute(hConsole_2, colorWalkable);
+            enemyAttackPosArray[i].row = 0;
+            enemyAttackPosArray[i].col = 0;
+        }
+    }
 }
 
 void ResetPlayerAttackCells()
@@ -284,7 +376,7 @@ void ResetPlayerAttackCells()
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
                 Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
                 cout << charEmpty;
-                SetConsoleTextAttribute(hConsole_2, colorWall);
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
         }
         break;
@@ -297,7 +389,7 @@ void ResetPlayerAttackCells()
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
                 Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
                 cout << charEmpty;
-                SetConsoleTextAttribute(hConsole_2, colorWall);
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
         }
         break;
@@ -327,7 +419,7 @@ void ProcessPlayerAttack(AttackDirections attackDir)
                 SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
                 Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
                 cout << charPlayerAttack;
-                SetConsoleTextAttribute(hConsole_2, colorWall);
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
         }
         currentActiveAttacks = daggerAttacksPosAmount;
@@ -342,7 +434,7 @@ void ProcessPlayerAttack(AttackDirections attackDir)
                 SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
                 Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
                 cout << charPlayerAttack;
-                SetConsoleTextAttribute(hConsole_2, colorWall);
+                SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
         }
         currentActiveAttacks = swordAttacksPosAmount;
@@ -360,7 +452,7 @@ void ProcessPlayerAttack(AttackDirections attackDir)
 
 void Debug_DrawMap()
 {
-    Gotoxy(fpsInfoPosX, fpsInfoPosY + 2);
+    Gotoxy(playerHpPosX, playerHpPosY+ 2);
     cout << endl;
     for (int i = 0; i < mapSizeRows; i++)
     {

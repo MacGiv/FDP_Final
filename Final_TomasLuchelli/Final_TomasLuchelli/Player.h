@@ -4,6 +4,9 @@
 
 enum class Weapons {DAGGER = 1, SWORD, AXE, POLE, POLEAXE};
 
+// Player data
+int extern playerHp;
+bool extern hitReceived;
 Weapons extern playerCurrentWeapon;
 
 cellStruct InitializePlayer();

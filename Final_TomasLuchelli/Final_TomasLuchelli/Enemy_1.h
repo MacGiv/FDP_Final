@@ -8,6 +8,10 @@
 enum class EnemyDirection { UP, DOWN, LEFT, RIGHT };
 enum class EnemyAttackType { CROSS, DIAGONAL, SURROUND };
 
+int const maxEnemyAttacksP1 = 16; 
+int const maxEnemyAttacksP2 = 24; 
+int const maxEnemyAttacksP3 = 32; 
+
 struct EnemyCell
 {
 	cellStruct cell;
@@ -36,5 +40,7 @@ void EnemyMoveDown(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols]);
 void EnemyMoveRight(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols]);
 
 void EnemyMoveLeft(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols]);
+
+void EnemyAttack(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols], EnemyAttackType, enemyAttackPosition enemyAttacks[maxEnemyAttacksP1]);
 
 void DrawEnemy(EnemyCell enemyToDraw, cellStruct map[mapSizeRows][mapSizeCols], HANDLE& hConsole);

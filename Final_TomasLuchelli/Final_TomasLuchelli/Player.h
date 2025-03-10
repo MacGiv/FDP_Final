@@ -6,7 +6,6 @@
 // Player data
 int extern playerHp;
 bool extern hitReceived;
-Weapons extern playerCurrentWeapon_2;
 
 cellStruct InitializePlayer();
 

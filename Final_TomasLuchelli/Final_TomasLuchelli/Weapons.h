@@ -1,9 +1,6 @@
 #pragma once
 #include "GameData.h"
 
-
-enum class Weapons { DAGGER = 1, SWORD, AXE, POLE, POLEAXE };
-
 void GetAttackPositionsDagger(playerAttackPosition attackPos[daggerAttacksPosAmount], AttackDirections direction, cellStruct playerStruct);
 
 void GetAttackPositionsSword(playerAttackPosition attackPos[swordAttacksPosAmount], AttackDirections direction, cellStruct playerStruct);

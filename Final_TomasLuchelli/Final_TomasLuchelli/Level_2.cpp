@@ -5,14 +5,11 @@ HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap_2[mapSizeRows][mapSizeCols];
 
 cellStruct player_2;
-//Weapons playerCurrentWeapon = Weapons::DAGGER;
-//attackPosition attackPositionsArray[daggerAttacksPosAmount];
-//Weapons playerCurrentWeapon = Weapons::SWORD;
-//playerAttackPosition attackPositionsArray[swordAttacksPosAmount];
-//Weapons playerCurrentWeapon = Weapons::AXE;
-//playerAttackPosition attackPositionsArray[axeAttacksPosAmount];
-Weapons playerCurrentWeapon = Weapons::POLE;
-playerAttackPosition attackPositionsArray[poleAttacksPosAmount];
+playerAttackPosition attackPositionsArrayDagger[daggerAttacksPosAmount];
+playerAttackPosition attackPositionsArraySword[swordAttacksPosAmount];
+playerAttackPosition attackPositionsArrayAxe[axeAttacksPosAmount];
+playerAttackPosition attackPositionsArrayPole[poleAttacksPosAmount];
+playerAttackPosition attackPositionsArrayPoleaxe[poleaxeAttacksPosAmount];
 int playerHp = 100;
 bool hitReceived = false;
 
@@ -281,23 +278,23 @@ void ProcessPlayerAttack_2(AttackDirections attackDir)
     switch (playerCurrentWeapon)
     {
     case Weapons::DAGGER:
-        PlayerAttackDagger(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackDagger(levelMap_2, attackDir, attackPositionsArrayDagger, player_2);
         currentActiveAttacks = daggerAttacksPosAmount;
         break;
     case Weapons::SWORD:
-        PlayerAttackSword(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackSword(levelMap_2, attackDir, attackPositionsArraySword, player_2);
         currentActiveAttacks = swordAttacksPosAmount;
         break;
     case Weapons::AXE:
-        PlayerAttackAxe(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackAxe(levelMap_2, attackDir, attackPositionsArrayAxe, player_2);
         currentActiveAttacks = axeAttacksPosAmount;
         break;
     case Weapons::POLE:
-        PlayerAttackPole(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackPole(levelMap_2, attackDir, attackPositionsArrayPole, player_2);
         currentActiveAttacks = poleAttacksPosAmount;
         break;
     case Weapons::POLEAXE:
-        PlayerAttackPoleaxe(levelMap_2, attackDir, attackPositionsArray, player_2);
+        PlayerAttackPoleaxe(levelMap_2, attackDir, attackPositionsArrayPoleaxe, player_2);
         currentActiveAttacks = poleaxeAttacksPosAmount;
         break;
     default:
@@ -340,11 +337,11 @@ void ResetPlayerAttackCells_2()
     case Weapons::DAGGER:
         for (int i = 0; i < daggerAttacksPosAmount; i++)
         {
-            if (attackPositionsArray[i].attackPossible)
+            if (attackPositionsArrayDagger[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                levelMap_2[attackPositionsArrayDagger[i].row][attackPositionsArrayDagger[i].col].cellType = CellTypes::WALKABLE;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
-                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                Gotoxy(mapStartPosX + attackPositionsArrayDagger[i].col, mapStartPosY + attackPositionsArrayDagger[i].row);
                 cout << charEmpty;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
@@ -353,11 +350,11 @@ void ResetPlayerAttackCells_2()
     case Weapons::SWORD:
         for (int i = 0; i < swordAttacksPosAmount; i++)
         {
-            if (attackPositionsArray[i].attackPossible)
+            if (attackPositionsArraySword[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                levelMap_2[attackPositionsArraySword[i].row][attackPositionsArraySword[i].col].cellType = CellTypes::WALKABLE;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
-                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                Gotoxy(mapStartPosX + attackPositionsArraySword[i].col, mapStartPosY + attackPositionsArraySword[i].row);
                 cout << charEmpty;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
@@ -366,11 +363,11 @@ void ResetPlayerAttackCells_2()
     case Weapons::AXE:
         for (int i = 0; i < axeAttacksPosAmount; i++)
         {
-            if (attackPositionsArray[i].attackPossible)
+            if (attackPositionsArrayAxe[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                levelMap_2[attackPositionsArrayAxe[i].row][attackPositionsArrayAxe[i].col].cellType = CellTypes::WALKABLE;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
-                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                Gotoxy(mapStartPosX + attackPositionsArrayAxe[i].col, mapStartPosY + attackPositionsArrayAxe[i].row);
                 cout << charEmpty;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
@@ -379,11 +376,11 @@ void ResetPlayerAttackCells_2()
     case Weapons::POLE:
         for (int i = 0; i < poleAttacksPosAmount; i++)
         {
-            if (attackPositionsArray[i].attackPossible)
+            if (attackPositionsArrayPole[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                levelMap_2[attackPositionsArrayPole[i].row][attackPositionsArrayPole[i].col].cellType = CellTypes::WALKABLE;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
-                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                Gotoxy(mapStartPosX + attackPositionsArrayPole[i].col, mapStartPosY + attackPositionsArrayPole[i].row);
                 cout << charEmpty;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
@@ -392,11 +389,11 @@ void ResetPlayerAttackCells_2()
     case Weapons::POLEAXE:
         for (int i = 0; i < poleaxeAttacksPosAmount; i++)
         {
-            if (attackPositionsArray[i].attackPossible)
+            if (attackPositionsArrayPoleaxe[i].attackPossible)
             {
-                levelMap_2[attackPositionsArray[i].row][attackPositionsArray[i].col].cellType = CellTypes::WALKABLE;
+                levelMap_2[attackPositionsArrayPoleaxe[i].row][attackPositionsArrayPoleaxe[i].col].cellType = CellTypes::WALKABLE;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
-                Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+                Gotoxy(mapStartPosX + attackPositionsArrayPoleaxe[i].col, mapStartPosY + attackPositionsArrayPoleaxe[i].row);
                 cout << charEmpty;
                 SetConsoleTextAttribute(hConsole_2, colorWalkable);
             }
@@ -412,29 +409,159 @@ void CheckEnemyHit_2()
 {
     for (int i = 0; i < maxPlayerAttacks; i++) 
     {
-        if (attackPositionsArray[i].attackPossible)
+        switch (playerCurrentWeapon)
         {
-            for (int j = 0; j < maxEnemies; j++) 
+        case Weapons::DAGGER:
+        if (attackPositionsArrayDagger[i].attackPossible)
+        {
+            for (int j = 0; j < maxEnemies; j++)
             {
                 if (enemiesArray[j].isAlive)
                 {
-                    if (attackPositionsArray[i].row == enemiesArray[j].cell.posRow &&
-                        attackPositionsArray[i].col == enemiesArray[j].cell.posCol) 
+                    if (attackPositionsArrayDagger[i].row == enemiesArray[j].cell.posRow &&
+                        attackPositionsArrayDagger[i].col == enemiesArray[j].cell.posCol)
                     {
 
                         enemiesArray[j].hp -= 100;
 
-                        if (enemiesArray[j].hp <= 0) 
+                        if (enemiesArray[j].hp <= 0)
                         {
                             enemiesArray[j].isAlive = false;
                             levelMap_2[enemiesArray[j].cell.posRow]
-                                      [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                                [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
                         }
                     }
                 }
-                
+
             }
         }
+            break;
+        case Weapons::SWORD:
+            if (attackPositionsArraySword[i].attackPossible)
+            {
+                for (int j = 0; j < maxEnemies; j++)
+                {
+                    if (enemiesArray[j].isAlive)
+                    {
+                        if (attackPositionsArraySword[i].row == enemiesArray[j].cell.posRow &&
+                            attackPositionsArraySword[i].col == enemiesArray[j].cell.posCol)
+                        {
+
+                            enemiesArray[j].hp -= 100;
+
+                            if (enemiesArray[j].hp <= 0)
+                            {
+                                enemiesArray[j].isAlive = false;
+                                levelMap_2[enemiesArray[j].cell.posRow]
+                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                            }
+                        }
+                    }
+
+                }
+            }
+            break;
+        case Weapons::AXE:
+            if (attackPositionsArrayAxe[i].attackPossible)
+            {
+                for (int j = 0; j < maxEnemies; j++)
+                {
+                    if (enemiesArray[j].isAlive)
+                    {
+                        if (attackPositionsArrayAxe[i].row == enemiesArray[j].cell.posRow &&
+                            attackPositionsArrayAxe[i].col == enemiesArray[j].cell.posCol)
+                        {
+
+                            enemiesArray[j].hp -= 100;
+
+                            if (enemiesArray[j].hp <= 0)
+                            {
+                                enemiesArray[j].isAlive = false;
+                                levelMap_2[enemiesArray[j].cell.posRow]
+                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                            }
+                        }
+                    }
+
+                }
+            }
+            break;
+        case Weapons::POLE:
+            if (attackPositionsArrayPole[i].attackPossible)
+            {
+                for (int j = 0; j < maxEnemies; j++)
+                {
+                    if (enemiesArray[j].isAlive)
+                    {
+                        if (attackPositionsArrayPole[i].row == enemiesArray[j].cell.posRow &&
+                            attackPositionsArrayPole[i].col == enemiesArray[j].cell.posCol)
+                        {
+
+                            enemiesArray[j].hp -= 100;
+
+                            if (enemiesArray[j].hp <= 0)
+                            {
+                                enemiesArray[j].isAlive = false;
+                                levelMap_2[enemiesArray[j].cell.posRow]
+                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                            }
+                        }
+                    }
+
+                }
+            }
+            break;
+        case Weapons::POLEAXE:
+            if (attackPositionsArrayPoleaxe[i].attackPossible)
+            {
+                for (int j = 0; j < maxEnemies; j++)
+                {
+                    if (enemiesArray[j].isAlive)
+                    {
+                        if (attackPositionsArrayPoleaxe[i].row == enemiesArray[j].cell.posRow &&
+                            attackPositionsArrayPoleaxe[i].col == enemiesArray[j].cell.posCol)
+                        {
+
+                            enemiesArray[j].hp -= 100;
+
+                            if (enemiesArray[j].hp <= 0)
+                            {
+                                enemiesArray[j].isAlive = false;
+                                levelMap_2[enemiesArray[j].cell.posRow]
+                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                            }
+                        }
+                    }
+
+                }
+            }
+            break;
+        default:
+            break;
+        }
+        //if (attackPositionsArray[i].attackPossible)
+        //{
+        //    for (int j = 0; j < maxEnemies; j++) 
+        //    {
+        //        if (enemiesArray[j].isAlive)
+        //        {
+        //            if (attackPositionsArray[i].row == enemiesArray[j].cell.posRow /&&
+        //                attackPositionsArray[i].col == enemiesArray[j].cell.posCol) 
+        //            {
+        //
+        //                enemiesArray[j].hp -= 100;
+        //
+        //                if (enemiesArray[j].hp <= 0) 
+        //                {
+        //                    enemiesArray[j].isAlive = false;
+        //                    levelMap_2[enemiesArray[j].cell.posRow]
+        //                              [enemiesArray[j].cell.posCol].cellType = //CellTypes::WALKABLE;
+        //                }
+        //            }
+        //        }
+        //        
+        //    }
+        //}
     }
 }
 
@@ -557,10 +684,10 @@ void DrawPlayerSwordAttack_2()
     //Draw Attack
     for (int i = 0; i < swordAttacksPosAmount; i++)
     {
-        if (attackPositionsArray[i].attackPossible)
+        if (attackPositionsArraySword[i].attackPossible)
         {
             SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-            Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+            Gotoxy(mapStartPosX + attackPositionsArraySword[i].col, mapStartPosY + attackPositionsArraySword[i].row);
             cout << charPlayerAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
         }
@@ -572,10 +699,10 @@ void DrawPlayerDaggerAttack_2()
     //Draw Attack
     for (int i = 0; i < daggerAttacksPosAmount; i++)
     {
-        if (attackPositionsArray[i].attackPossible)
+        if (attackPositionsArrayDagger[i].attackPossible)
         {
             SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-            Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+            Gotoxy(mapStartPosX + attackPositionsArrayDagger[i].col, mapStartPosY + attackPositionsArrayDagger[i].row);
             cout << charPlayerAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
         }
@@ -587,10 +714,10 @@ void DrawPlayerAxeAttack_2()
     //Draw Attack
     for (int i = 0; i < axeAttacksPosAmount; i++)
     {
-        if (attackPositionsArray[i].attackPossible)
+        if (attackPositionsArrayAxe[i].attackPossible)
         {
             SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-            Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+            Gotoxy(mapStartPosX + attackPositionsArrayAxe[i].col, mapStartPosY + attackPositionsArrayAxe[i].row);
             cout << charPlayerAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
         }
@@ -602,10 +729,10 @@ void DrawPlayerPoleAttack_2()
     //Draw Attack
     for (int i = 0; i < poleAttacksPosAmount; i++)
     {
-        if (attackPositionsArray[i].attackPossible)
+        if (attackPositionsArrayPole[i].attackPossible)
         {
             SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-            Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+            Gotoxy(mapStartPosX + attackPositionsArrayPole[i].col, mapStartPosY + attackPositionsArrayPole[i].row);
             cout << charPlayerAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
         }
@@ -617,10 +744,10 @@ void DrawPlayerPoleaxeAttack_2()
     //Draw Attack
     for (int i = 0; i < poleaxeAttacksPosAmount; i++)
     {
-        if (attackPositionsArray[i].attackPossible)
+        if (attackPositionsArrayPoleaxe[i].attackPossible)
         {
             SetConsoleTextAttribute(hConsole_2, colorPlayerAttack);
-            Gotoxy(mapStartPosX + attackPositionsArray[i].col, mapStartPosY + attackPositionsArray[i].row);
+            Gotoxy(mapStartPosX + attackPositionsArrayPoleaxe[i].col, mapStartPosY + attackPositionsArrayPoleaxe[i].row);
             cout << charPlayerAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
         }

@@ -63,17 +63,12 @@ int const axeAttacksPosAmount = 4;
 int const poleAttacksPosAmount = 3;
 int const poleaxeAttacksPosAmount = 5;
 
-// Externs
-extern int playerLevelProgress;
-extern double startTime;
-extern double currentTime;
-extern double lastTime;
-extern int fps;
-extern int frameCount;
 
 enum class CellTypes {DEFAULT, WALKABLE, WALL, PLAYER, ENEMY, EXIT, PLAYER_ATTACK, ENEMY_ATTACK };
 
 enum class AttackDirections { NORTH, SOUTH, EAST, WEST };
+
+enum class Weapons { DAGGER = 1, SWORD, AXE, POLE, POLEAXE };
 
 struct cellStruct
 {
@@ -93,3 +88,11 @@ struct playerAttackPosition
 	bool attackPossible = false;
 };
 
+// Externs
+extern int playerLevelProgress;
+extern double startTime;
+extern double currentTime;
+extern double lastTime;
+extern int fps;
+extern int frameCount;
+extern Weapons playerCurrentWeapon;

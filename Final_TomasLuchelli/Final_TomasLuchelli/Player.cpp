@@ -71,6 +71,20 @@ bool IsAttackInput(char inputChar)
 	}
 }
 
+// Returns true if inputChar is 1, 2, 3, 4 ,5
+bool IsWeaponInput(char inputChar)
+{
+	if (static_cast<int>(inputChar) > 48 && 
+		static_cast<int>(inputChar) < 54)
+	{
+		return true;
+	}
+	else
+	{
+		return false;
+	}
+}
+
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar)
 {
 	//Get next pos of the player

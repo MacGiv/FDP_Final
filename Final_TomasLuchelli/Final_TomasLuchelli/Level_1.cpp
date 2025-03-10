@@ -112,7 +112,7 @@ void Draw_1()
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
     cout << "Level: 1";
 
-    Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
+    Gotoxy(infoOnePosX, infoOnePosY);
     cout << "Objective: Move the player to the exit using WASD. Press ESC to exit.";
 
     // Draw time elapsed

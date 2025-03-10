@@ -17,6 +17,9 @@ bool IsMovementInput(char inputChar);
 // Returns true if inputChar is I, J, K, or L
 bool IsAttackInput(char inputChar);
 
+// Returns true if inputChar is 1, 2, 3, 4 ,5
+bool IsWeaponInput(char inputChar);
+
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar);
 
 // Player Attacks

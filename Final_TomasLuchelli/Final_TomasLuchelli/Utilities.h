@@ -34,3 +34,5 @@ double GetTimeElapsed(double startTime);
 CellTypes GetCellType(cellStruct map[mapSizeRows][mapSizeCols], int posRow, int posCol);
 
 void CalculateFPS(double& startTime, double& currentTime, double& lastTime, int& frameCount, int& fps);
+
+void CleanHead();

@@ -226,3 +226,18 @@ void CalculateFPS(double& startTime, double& currentTime, double& lastTime, int&
 	}
 
 }
+
+
+void CleanHead()
+{
+	int amountOfLines = 2;
+	int amountOfSpaces = 99;
+	Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
+	for (int i = 0; i < amountOfLines; i++)
+	{
+		for (int i = 0; i < amountOfSpaces; i++)
+		{
+			cout << " ";
+		}
+	}
+}

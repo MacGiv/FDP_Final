@@ -78,17 +78,17 @@ void GetAttackPositionsAxe(playerAttackPosition attackPos[axeAttacksPosAmount], 
         switch (direction)
         {
         case AttackDirections::NORTH:
-            if (i < 2) // Golpea en línea recta
+            if (i < 2) // Rect
             {
                 auxPos.row = playerStruct.posRow - 1 - i;
                 auxPos.col = playerStruct.posCol;
             }
-            else if (i == 2) // Golpe arriba del más lejano
+            else if (i == 2) // Clockwise 
             {
                 auxPos.row = playerStruct.posRow - 2;
                 auxPos.col = playerStruct.posCol - 1;
             }
-            else if (i == 3) // Golpe abajo del más lejano
+            else if (i == 3) // Not clockwise
             {
                 auxPos.row = playerStruct.posRow - 2;
                 auxPos.col = playerStruct.posCol + 1;
@@ -102,12 +102,12 @@ void GetAttackPositionsAxe(playerAttackPosition attackPos[axeAttacksPosAmount], 
             }
             else if (i == 2)
             {
-                auxPos.row = playerStruct.posRow + 3;
+                auxPos.row = playerStruct.posRow + 2;
                 auxPos.col = playerStruct.posCol - 1;
             }
             else if (i == 3)
             {
-                auxPos.row = playerStruct.posRow + 3;
+                auxPos.row = playerStruct.posRow + 2;
                 auxPos.col = playerStruct.posCol + 1;
             }
             break;
@@ -120,12 +120,12 @@ void GetAttackPositionsAxe(playerAttackPosition attackPos[axeAttacksPosAmount], 
             else if (i == 2)
             {
                 auxPos.row = playerStruct.posRow - 1;
-                auxPos.col = playerStruct.posCol + 3;
+                auxPos.col = playerStruct.posCol + 2;
             }
             else if (i == 3)
             {
                 auxPos.row = playerStruct.posRow + 1;
-                auxPos.col = playerStruct.posCol + 3;
+                auxPos.col = playerStruct.posCol + 2;
             }
             break;
         case AttackDirections::WEST:
@@ -137,12 +137,12 @@ void GetAttackPositionsAxe(playerAttackPosition attackPos[axeAttacksPosAmount], 
             else if (i == 2)
             {
                 auxPos.row = playerStruct.posRow - 1;
-                auxPos.col = playerStruct.posCol - 3;
+                auxPos.col = playerStruct.posCol - 2;
             }
             else if (i == 3)
             {
                 auxPos.row = playerStruct.posRow + 1;
-                auxPos.col = playerStruct.posCol - 3;
+                auxPos.col = playerStruct.posCol - 2;
             }
             break;
         default:
@@ -194,19 +194,19 @@ void GetAttackPositionsPoleaxe(playerAttackPosition attackPos[poleaxeAttacksPosA
         switch (direction)
         {
         case AttackDirections::NORTH:
-            if (i < 3) // Golpea en línea recta
+            if (i < 3) // Rect
             {
                 auxPos.row = playerStruct.posRow - 1 - i;
                 auxPos.col = playerStruct.posCol;
             }
-            else if (i == 3) // Golpe extra arriba del más lejano
+            else if (i == 3) // North East
             {
-                auxPos.row = playerStruct.posRow - 4;
+                auxPos.row = playerStruct.posRow - 3;
                 auxPos.col = playerStruct.posCol - 1;
             }
-            else if (i == 4) // Golpe extra abajo del más lejano
+            else if (i == 4) // North West
             {
-                auxPos.row = playerStruct.posRow - 4;
+                auxPos.row = playerStruct.posRow - 3;
                 auxPos.col = playerStruct.posCol + 1;
             }
             break;
@@ -218,12 +218,12 @@ void GetAttackPositionsPoleaxe(playerAttackPosition attackPos[poleaxeAttacksPosA
             }
             else if (i == 3)
             {
-                auxPos.row = playerStruct.posRow + 4;
+                auxPos.row = playerStruct.posRow + 3;
                 auxPos.col = playerStruct.posCol - 1;
             }
             else if (i == 4)
             {
-                auxPos.row = playerStruct.posRow + 4;
+                auxPos.row = playerStruct.posRow + 3;
                 auxPos.col = playerStruct.posCol + 1;
             }
             break;
@@ -236,12 +236,12 @@ void GetAttackPositionsPoleaxe(playerAttackPosition attackPos[poleaxeAttacksPosA
             else if (i == 3)
             {
                 auxPos.row = playerStruct.posRow - 1;
-                auxPos.col = playerStruct.posCol + 4;
+                auxPos.col = playerStruct.posCol + 3;
             }
             else if (i == 4)
             {
                 auxPos.row = playerStruct.posRow + 1;
-                auxPos.col = playerStruct.posCol + 4;
+                auxPos.col = playerStruct.posCol + 3;
             }
             break;
         case AttackDirections::WEST:
@@ -253,12 +253,12 @@ void GetAttackPositionsPoleaxe(playerAttackPosition attackPos[poleaxeAttacksPosA
             else if (i == 3)
             {
                 auxPos.row = playerStruct.posRow - 1;
-                auxPos.col = playerStruct.posCol - 4;
+                auxPos.col = playerStruct.posCol - 3;
             }
             else if (i == 4)
             {
                 auxPos.row = playerStruct.posRow + 1;
-                auxPos.col = playerStruct.posCol - 4;
+                auxPos.col = playerStruct.posCol - 3;
             }
             break;
         default:

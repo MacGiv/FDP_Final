@@ -37,6 +37,7 @@ bool endLevelConditionMet_2 = false;
 void Initialize_2(bool& continueGame, bool& playerLost);
 void InitializeEnemies_2();
 void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked);
+void SwitchWeapon(int inputChar);
 void ProcessPlayerAttack_2(AttackDirections attackDir);
 void CheckEnemyHit_2();
 void ResetPlayerAttackCells_2();
@@ -63,7 +64,8 @@ void StartLevel_2(bool& continueGame, bool& playerLost)
     lastTime = clock();
     fps = 0;
     frameCount = 0;
-    
+    CleanHead();
+
     Initialize_2(continueGame, playerLost);
 
     do
@@ -85,9 +87,7 @@ void Initialize_2(bool& continueGame, bool& playerLost)
     playerHp = 100;
     hitReceived = false;
     lastEnemyMoveTime = 0;
-    enemyMoveInterval = 0.7;
     lastEnemyAttackTime = 1;
-    enemyAttackInterval = 1;
     // Initialize attack positions array
     switch (playerCurrentWeapon)
     {
@@ -128,7 +128,8 @@ void InitializeEnemies_2()
     }
     for (int i = 0; i < maxEnemies; i++)
     { 
-        InitializeEnemy(enemiesArray[i], player_2.posRow, player_2.posCol + (mapSizeCols / 2));
+        int randTemp = rand() % 4 + 2;  // Between 2 (doesn't hit the player) and 4 (not out of bounds)
+        InitializeEnemy(enemiesArray[i], mapCenterPosY, mapOneFifthPosX*randTemp);
         levelMap_2[enemiesArray[i].cell.posRow][enemiesArray[i].cell.posCol].cellType = CellTypes::ENEMY;
     }
 }
@@ -146,7 +147,13 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
         inputChar = _getch();
         if (inputChar != charEscapeKey)
         {
-            if (IsMovementInput(inputChar))
+            if (IsWeaponInput(inputChar) && !playerHasAttacked)
+            {
+                ResetPlayerAttackCells_2();
+                int tempValue = static_cast<int>(inputChar) - 48;
+                SwitchWeapon(tempValue);
+            }
+            else if (IsMovementInput(inputChar))
             {
                 ProcessPlayerMovement(playerHasMoved, player_2, levelMap_2, inputChar);
             }
@@ -270,6 +277,35 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
         {
             continueGame = false;
         }
+    }
+}
+
+void SwitchWeapon(int weaponSelected)
+{
+    switch (weaponSelected)
+    {
+    case static_cast<int>(Weapons::DAGGER):
+        maxPlayerAttacks = daggerAttacksPosAmount;
+        playerCurrentWeapon = Weapons::DAGGER;
+        break;
+    case static_cast<int>(Weapons::SWORD):
+        maxPlayerAttacks = swordAttacksPosAmount;
+        playerCurrentWeapon = Weapons::SWORD;
+        break;
+    case static_cast<int>(Weapons::AXE):
+        maxPlayerAttacks = axeAttacksPosAmount;
+        playerCurrentWeapon = Weapons::AXE;
+        break;
+    case static_cast<int>(Weapons::POLE):
+        maxPlayerAttacks = poleAttacksPosAmount;
+        playerCurrentWeapon = Weapons::POLE;
+        break;
+    case static_cast<int>(Weapons::POLEAXE):
+        maxPlayerAttacks = poleaxeAttacksPosAmount;
+        playerCurrentWeapon = Weapons::POLEAXE;
+        break;
+    default:
+        break;
     }
 }
 
@@ -595,9 +631,12 @@ void Draw_2()
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
     cout << "Level 2";
     // Draw level info
-    Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
-    cout << "Objective: Move the player to the exit using WASD. Attack with IJKL. Press ESC to exit.";
-
+    Gotoxy(infoOnePosX, infoOnePosY);
+    cout << "Objective: Attack with I, J, K and L. Defeat the enemy and get to the exit.";
+    Gotoxy(infoTwoPosX, infoTwoPosY);
+    cout << "1 = Dagger | 2 = Sword | 3 = Axe | 4 = Pole | 5 = Poleaxe";
+    Gotoxy(infoThreePosX, infoThreePosY);
+    cout << "Change weapons with 1, 2, 3, 4 and 5.";
     // Draw time elapsed
     Gotoxy(timeInfoPosX, timeInfoPosY);
     cout << "Time: " << static_cast<int>(currentTime) << " sec";
@@ -619,7 +658,7 @@ void Draw_2()
     
 
     //DEBUG
-    Debug_DrawMap_2();
+    //Debug_DrawMap_2();
     //END DEBUG
 
     SetConsoleTextAttribute(hConsole_2, colorWalkable);

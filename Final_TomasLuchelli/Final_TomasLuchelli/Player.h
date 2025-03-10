@@ -11,6 +11,7 @@ cellStruct InitializePlayer();
 
 AttackDirections GetAttackDirection(int inputChar);
 
+
 // Returns true if inputChar is W, A, S, or D
 bool IsMovementInput(char inputChar);
 

@@ -45,14 +45,19 @@ void ShowMainMenu()
 
 			break;
 		case MenuOptions::HOW_TO_PLAY:
-
+			system("cls");
+			cout << "Move using W, A, S and D \n";
+			cout << "Attack with I, J, K and L\n";
+			cout << "Change weapon with 1, 2, 3, 4 or 5\n";
+			cout << "\n\n";
+			system("pause");
 			break;
 		case MenuOptions::CREDITS:
 			system("cls");
 			cout << "Examen Final \n";
 			cout << "Fundamentos de la Programacion - Laboratorio de Programacion\n";
 			cout << "Tomas Francisco Luchelli\n";
-			cout << "31-07-2024\n\n";
+			cout << "10-03-2025\n\n";
 			system("pause");
 			break;
 		case MenuOptions::EXIT:

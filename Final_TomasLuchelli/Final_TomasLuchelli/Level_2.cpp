@@ -5,39 +5,34 @@ HANDLE hConsole_2 = GetStdHandle(STD_OUTPUT_HANDLE);
 cellStruct levelMap_2[mapSizeRows][mapSizeCols];
 
 cellStruct player_2;
-playerAttackPosition attackPositionsArrayDagger[daggerAttacksPosAmount];
-playerAttackPosition attackPositionsArraySword[swordAttacksPosAmount];
-playerAttackPosition attackPositionsArrayAxe[axeAttacksPosAmount];
-playerAttackPosition attackPositionsArrayPole[poleAttacksPosAmount];
-playerAttackPosition attackPositionsArrayPoleaxe[poleaxeAttacksPosAmount];
-int playerHp = 100;
-bool hitReceived = false;
+
+int playerHp_2 = 100;
+bool hitReceived_2 = false;
 
 // Player's attack variables
-extern double lastAttackTime = 999;
-extern double attackDurationTime = 0.3;
-extern int    currentActiveAttacks = 0;
-extern int    maxPlayerAttacks = 1;
-extern bool   playerHasAttacked = false;
+double lastAttackTime_2 = 999;
+double attackDurationTime_2 = 0.3;
+int currentActiveAttacks_2 = 0;
+int maxPlayerAttacks_2 = 1;
+bool playerHasAttacked_2 = false;
 
 // Enemies variables
-int enemyDamage = 50;
-int totalEnemies = 1;
-int const maxEnemies = 1;
-int const maxEnemyActiveAttacks = maxEnemyAttacksP1; 
-enemyAttackPosition enemyAttackPosArray[maxEnemyActiveAttacks];
-EnemyCell enemiesArray[maxEnemies];
-double lastEnemyMoveTime = 0;
-double enemyMoveInterval = 0.7;
-double lastEnemyAttackTime = 1;
-double enemyAttackInterval = 1;
+int enemyDamage_2 = 50;
+int const maxEnemies_2 = 2;
+int const maxEnemyActiveAttacks_2 = maxEnemyAttacksP1; 
+enemyAttackPosition enemyAttackPosArray_2[maxEnemyActiveAttacks_2];
+EnemyCell enemiesArray_2[maxEnemies_2];
+double lastEnemyMoveTime_2 = 0;
+double enemyMoveInterval_2 = 0.7;
+double lastEnemyAttackTime_2 = 1;
+double enemyAttackInterval_2 = 1;
 
 bool endLevelConditionMet_2 = false;
 
 void Initialize_2(bool& continueGame, bool& playerLost);
 void InitializeEnemies_2();
 void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked);
-void SwitchWeapon(int inputChar);
+void SwitchWeapon_2(int inputChar);
 void ProcessPlayerAttack_2(AttackDirections attackDir);
 void CheckEnemyHit_2();
 void ResetPlayerAttackCells_2();
@@ -52,7 +47,7 @@ void DrawPlayerPoleaxeAttack_2();
 void DrawPlayer_2();
 void Draw_2();
 void DrawPlayerAttack_2();
-void DrawEnemies_2(EnemyCell enemies[maxEnemies]);
+void DrawEnemies_2(EnemyCell enemies[maxEnemies_2]);
 void Debug_DrawMap_2();
 
 void StartLevel_2(bool& continueGame, bool& playerLost)
@@ -71,10 +66,20 @@ void StartLevel_2(bool& continueGame, bool& playerLost)
     do
     {
         CalculateFPS(startTime, currentTime, lastTime, frameCount, fps);
-        Update_2(continueGame, playerLost, playerHasAttacked);
+        Update_2(continueGame, playerLost, playerHasAttacked_2);
         Draw_2();
         Sleep(16);
     } while (continueGame && !playerLost);
+
+    if (!playerLost)
+    {
+        playerPhase = 3 ;
+        continueGame = true;
+    }
+    else
+    {
+        playerPhase = 1;
+    }
 }
 
 void Initialize_2(bool& continueGame, bool& playerLost)
@@ -84,27 +89,27 @@ void Initialize_2(bool& continueGame, bool& playerLost)
     startTime = clock();
     currentTime = 0;
     endLevelConditionMet_2 = false;
-    playerHp = 100;
-    hitReceived = false;
-    lastEnemyMoveTime = 0;
-    lastEnemyAttackTime = 1;
+    playerHp_2 = 100;
+    hitReceived_2 = false;
+    lastEnemyMoveTime_2 = 0;
+    lastEnemyAttackTime_2 = 1;
     // Initialize attack positions array
     switch (playerCurrentWeapon)
     {
     case Weapons::DAGGER:
-        maxPlayerAttacks = daggerAttacksPosAmount;
+        maxPlayerAttacks_2 = daggerAttacksPosAmount;
         break;
     case Weapons::SWORD:
-        maxPlayerAttacks = swordAttacksPosAmount;
+        maxPlayerAttacks_2 = swordAttacksPosAmount;
         break;
     case Weapons::AXE:
-        maxPlayerAttacks = axeAttacksPosAmount;
+        maxPlayerAttacks_2 = axeAttacksPosAmount;
         break;
     case Weapons::POLE:
-        maxPlayerAttacks = poleAttacksPosAmount;
+        maxPlayerAttacks_2 = poleAttacksPosAmount;
         break;
     case Weapons::POLEAXE:
-        maxPlayerAttacks = poleaxeAttacksPosAmount;
+        maxPlayerAttacks_2 = poleaxeAttacksPosAmount;
         break;
     default:
         break;
@@ -120,17 +125,17 @@ void Initialize_2(bool& continueGame, bool& playerLost)
 
 void InitializeEnemies_2()
 {
-    for (int i = 0; i < maxPlayerAttacks; i++)
+    for (int i = 0; i < maxPlayerAttacks_2; i++)
     {
-        enemyAttackPosArray[i].row = 0;
-        enemyAttackPosArray[i].col = 0;
-        enemyAttackPosArray[i].isActive = false;
+        enemyAttackPosArray_2[i].row = 0;
+        enemyAttackPosArray_2[i].col = 0;
+        enemyAttackPosArray_2[i].isActive = false;
     }
-    for (int i = 0; i < maxEnemies; i++)
+    for (int i = 0; i < maxEnemies_2; i++)
     { 
         int randTemp = rand() % 4 + 2;  // Between 2 (doesn't hit the player) and 4 (not out of bounds)
-        InitializeEnemy(enemiesArray[i], mapCenterPosY, mapOneFifthPosX*randTemp);
-        levelMap_2[enemiesArray[i].cell.posRow][enemiesArray[i].cell.posCol].cellType = CellTypes::ENEMY;
+        InitializeEnemy(enemiesArray_2[i], mapCenterPosY, mapOneFifthPosX*randTemp, i);
+        levelMap_2[enemiesArray_2[i].cell.posRow][enemiesArray_2[i].cell.posCol].cellType = CellTypes::ENEMY;
     }
 }
 
@@ -151,7 +156,7 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
             {
                 ResetPlayerAttackCells_2();
                 int tempValue = static_cast<int>(inputChar) - 48;
-                SwitchWeapon(tempValue);
+                SwitchWeapon_2(tempValue);
             }
             else if (IsMovementInput(inputChar))
             {
@@ -166,7 +171,6 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
         else
         {
             playerHasMoved = false;
-            continueGame = false;
         }
     }
 
@@ -194,66 +198,66 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
         playerHasMoved = false;
     }
     // Player Attack
-    else if (playerHasAttacked && currentActiveAttacks < maxPlayerAttacks)
+    else if (playerHasAttacked && currentActiveAttacks_2 < maxPlayerAttacks_2)
     {
         ProcessPlayerAttack_2(attackDir);
         CheckEnemyHit_2();
-        lastAttackTime = currentTime;        
+        lastAttackTime_2 = currentTime;        
     }
 
     // Reset enemy attack cells
-    if (currentTime > lastEnemyAttackTime + attackDurationTime)
+    if (currentTime > lastEnemyAttackTime_2 + attackDurationTime_2)
     {
         ResetEnemyAttackCells_2();
         // Prevent morre than 1 hits to Player in the same attack
-        if (hitReceived == true)
+        if (hitReceived_2 == true)
         {
-            hitReceived = false;
+            hitReceived_2 = false;
         }
     }
     // Reset player attack cells
-    if (currentTime > lastAttackTime + attackDurationTime && currentActiveAttacks == maxPlayerAttacks)
+    if (currentTime > lastAttackTime_2 + attackDurationTime_2 && currentActiveAttacks_2 == maxPlayerAttacks_2)
     {
         ResetPlayerAttackCells_2();
     }
 
     // Enemy Move
     currentTime = (clock() - startTime) / static_cast<double>(CLOCKS_PER_SEC);
-    if (currentTime > lastEnemyMoveTime + enemyMoveInterval) 
+    if (currentTime > lastEnemyMoveTime_2 + enemyMoveInterval_2) 
     {
-        for (int i = 0; i < maxEnemies; i++) 
+        for (int i = 0; i < maxEnemies_2; i++) 
         {
-            if (enemiesArray[i].isAlive) 
+            if (enemiesArray_2[i].isAlive) 
             {
-                MoveEnemy(enemiesArray[i], levelMap_2);
+                MoveEnemy(enemiesArray_2[i], levelMap_2);
             }
         }
-        lastEnemyMoveTime = currentTime;
+        lastEnemyMoveTime_2 = currentTime;
         //Debug_DrawMap();
     }
     // Enemy Attack
-    else if (currentTime > lastEnemyAttackTime + enemyAttackInterval)
+    else if (currentTime > lastEnemyAttackTime_2 + enemyAttackInterval_2)
     {
-        for (int i = 0; i < maxEnemies; i++)
+        for (int i = 0; i < maxEnemies_2; i++)
         {
-            if (enemiesArray[i].isAlive)
+            if (enemiesArray_2[i].isAlive)
             {
-                EnemyAttack(enemiesArray[i], levelMap_2, enemiesArray[i].attackType, enemyAttackPosArray);
+                EnemyAttack(enemiesArray_2[i], levelMap_2, enemiesArray_2[i].attackType, enemyAttackPosArray_2);
             }
         }
-        lastEnemyAttackTime = currentTime;
+        lastEnemyAttackTime_2 = currentTime;
     }
 
     // Check for player damage
-    if (!hitReceived)
+    if (!hitReceived_2)
     {
-        for (int i = 0; i < maxEnemyActiveAttacks; i++)
+        for (int i = 0; i < maxEnemyActiveAttacks_2; i++)
         {
-            if (enemyAttackPosArray[i].isActive && player_2.posRow == enemyAttackPosArray[i].row && player_2.posCol == enemyAttackPosArray[i].col)
+            if (enemyAttackPosArray_2[i].isActive && player_2.posRow == enemyAttackPosArray_2[i].row && player_2.posCol == enemyAttackPosArray_2[i].col)
             {
-                playerHp -= 50;
-                hitReceived = true;
-                if (playerHp <= 0)
+                playerHp_2 -= 50;
+                hitReceived_2 = true;
+                if (playerHp_2 <= 0)
                 {
                     playerLost = true;
                     ResetEnemyAttackCells_2();
@@ -266,9 +270,9 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
     if (player_2.posRow == exitLevelPosY && player_2.posCol == exitLevelPosX)
     {
         int count = 0;
-        for (int i = 0; i < maxEnemies; i++)
+        for (int i = 0; i < maxEnemies_2; i++)
         {
-            if (enemiesArray[i].isAlive)
+            if (enemiesArray_2[i].isAlive)
             {
                 count++;
             }
@@ -280,28 +284,28 @@ void Update_2(bool& continueGame, bool& playerLost, bool& playerHasAttacked)
     }
 }
 
-void SwitchWeapon(int weaponSelected)
+void SwitchWeapon_2(int weaponSelected)
 {
     switch (weaponSelected)
     {
     case static_cast<int>(Weapons::DAGGER):
-        maxPlayerAttacks = daggerAttacksPosAmount;
+        maxPlayerAttacks_2 = daggerAttacksPosAmount;
         playerCurrentWeapon = Weapons::DAGGER;
         break;
     case static_cast<int>(Weapons::SWORD):
-        maxPlayerAttacks = swordAttacksPosAmount;
+        maxPlayerAttacks_2 = swordAttacksPosAmount;
         playerCurrentWeapon = Weapons::SWORD;
         break;
     case static_cast<int>(Weapons::AXE):
-        maxPlayerAttacks = axeAttacksPosAmount;
+        maxPlayerAttacks_2 = axeAttacksPosAmount;
         playerCurrentWeapon = Weapons::AXE;
         break;
     case static_cast<int>(Weapons::POLE):
-        maxPlayerAttacks = poleAttacksPosAmount;
+        maxPlayerAttacks_2 = poleAttacksPosAmount;
         playerCurrentWeapon = Weapons::POLE;
         break;
     case static_cast<int>(Weapons::POLEAXE):
-        maxPlayerAttacks = poleaxeAttacksPosAmount;
+        maxPlayerAttacks_2 = poleaxeAttacksPosAmount;
         playerCurrentWeapon = Weapons::POLEAXE;
         break;
     default:
@@ -315,23 +319,23 @@ void ProcessPlayerAttack_2(AttackDirections attackDir)
     {
     case Weapons::DAGGER:
         PlayerAttackDagger(levelMap_2, attackDir, attackPositionsArrayDagger, player_2);
-        currentActiveAttacks = daggerAttacksPosAmount;
+        currentActiveAttacks_2 = daggerAttacksPosAmount;
         break;
     case Weapons::SWORD:
         PlayerAttackSword(levelMap_2, attackDir, attackPositionsArraySword, player_2);
-        currentActiveAttacks = swordAttacksPosAmount;
+        currentActiveAttacks_2 = swordAttacksPosAmount;
         break;
     case Weapons::AXE:
         PlayerAttackAxe(levelMap_2, attackDir, attackPositionsArrayAxe, player_2);
-        currentActiveAttacks = axeAttacksPosAmount;
+        currentActiveAttacks_2 = axeAttacksPosAmount;
         break;
     case Weapons::POLE:
         PlayerAttackPole(levelMap_2, attackDir, attackPositionsArrayPole, player_2);
-        currentActiveAttacks = poleAttacksPosAmount;
+        currentActiveAttacks_2 = poleAttacksPosAmount;
         break;
     case Weapons::POLEAXE:
         PlayerAttackPoleaxe(levelMap_2, attackDir, attackPositionsArrayPoleaxe, player_2);
-        currentActiveAttacks = poleaxeAttacksPosAmount;
+        currentActiveAttacks_2 = poleaxeAttacksPosAmount;
         break;
     default:
         break;
@@ -350,18 +354,18 @@ void ResetEnemyPrevMovementCell_2(EnemyCell& tempEnemy)
 
 void ResetEnemyAttackCells_2()
 {
-    for (int i = 0; i < maxEnemyActiveAttacks; i++)
+    for (int i = 0; i < maxEnemyActiveAttacks_2; i++)
     {
-        if (enemyAttackPosArray[i].isActive)
+        if (enemyAttackPosArray_2[i].isActive)
         {
-            enemyAttackPosArray[i].isActive = false;
-            levelMap_2[enemyAttackPosArray[i].row][enemyAttackPosArray[i].col].cellType = CellTypes::WALKABLE;
+            enemyAttackPosArray_2[i].isActive = false;
+            levelMap_2[enemyAttackPosArray_2[i].row][enemyAttackPosArray_2[i].col].cellType = CellTypes::WALKABLE;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
-            Gotoxy(mapStartPosX + enemyAttackPosArray[i].col, mapStartPosY + enemyAttackPosArray[i].row);
+            Gotoxy(mapStartPosX + enemyAttackPosArray_2[i].col, mapStartPosY + enemyAttackPosArray_2[i].row);
             cout << charEmpty;
             SetConsoleTextAttribute(hConsole_2, colorWalkable);
-            enemyAttackPosArray[i].row = 0;
-            enemyAttackPosArray[i].col = 0;
+            enemyAttackPosArray_2[i].row = 0;
+            enemyAttackPosArray_2[i].col = 0;
         }
     }
 }
@@ -438,33 +442,33 @@ void ResetPlayerAttackCells_2()
     default:
         break;
     }  
-    currentActiveAttacks = 0;
+    currentActiveAttacks_2 = 0;
 }
 
 void CheckEnemyHit_2() 
 {
-    for (int i = 0; i < maxPlayerAttacks; i++) 
+    for (int i = 0; i < maxPlayerAttacks_2; i++) 
     {
         switch (playerCurrentWeapon)
         {
         case Weapons::DAGGER:
         if (attackPositionsArrayDagger[i].attackPossible)
         {
-            for (int j = 0; j < maxEnemies; j++)
+            for (int j = 0; j < maxEnemies_2; j++)
             {
-                if (enemiesArray[j].isAlive)
+                if (enemiesArray_2[j].isAlive)
                 {
-                    if (attackPositionsArrayDagger[i].row == enemiesArray[j].cell.posRow &&
-                        attackPositionsArrayDagger[i].col == enemiesArray[j].cell.posCol)
+                    if (attackPositionsArrayDagger[i].row == enemiesArray_2[j].cell.posRow &&
+                        attackPositionsArrayDagger[i].col == enemiesArray_2[j].cell.posCol)
                     {
 
-                        enemiesArray[j].hp -= 100;
+                        enemiesArray_2[j].hp -= 100;
 
-                        if (enemiesArray[j].hp <= 0)
+                        if (enemiesArray_2[j].hp <= 0)
                         {
-                            enemiesArray[j].isAlive = false;
-                            levelMap_2[enemiesArray[j].cell.posRow]
-                                [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                            enemiesArray_2[j].isAlive = false;
+                            levelMap_2[enemiesArray_2[j].cell.posRow]
+                                [enemiesArray_2[j].cell.posCol].cellType = CellTypes::WALKABLE;
                         }
                     }
                 }
@@ -475,21 +479,21 @@ void CheckEnemyHit_2()
         case Weapons::SWORD:
             if (attackPositionsArraySword[i].attackPossible)
             {
-                for (int j = 0; j < maxEnemies; j++)
+                for (int j = 0; j < maxEnemies_2; j++)
                 {
-                    if (enemiesArray[j].isAlive)
+                    if (enemiesArray_2[j].isAlive)
                     {
-                        if (attackPositionsArraySword[i].row == enemiesArray[j].cell.posRow &&
-                            attackPositionsArraySword[i].col == enemiesArray[j].cell.posCol)
+                        if (attackPositionsArraySword[i].row == enemiesArray_2[j].cell.posRow &&
+                            attackPositionsArraySword[i].col == enemiesArray_2[j].cell.posCol)
                         {
 
-                            enemiesArray[j].hp -= 100;
+                            enemiesArray_2[j].hp -= 100;
 
-                            if (enemiesArray[j].hp <= 0)
+                            if (enemiesArray_2[j].hp <= 0)
                             {
-                                enemiesArray[j].isAlive = false;
-                                levelMap_2[enemiesArray[j].cell.posRow]
-                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                                enemiesArray_2[j].isAlive = false;
+                                levelMap_2[enemiesArray_2[j].cell.posRow]
+                                    [enemiesArray_2[j].cell.posCol].cellType = CellTypes::WALKABLE;
                             }
                         }
                     }
@@ -500,21 +504,21 @@ void CheckEnemyHit_2()
         case Weapons::AXE:
             if (attackPositionsArrayAxe[i].attackPossible)
             {
-                for (int j = 0; j < maxEnemies; j++)
+                for (int j = 0; j < maxEnemies_2; j++)
                 {
-                    if (enemiesArray[j].isAlive)
+                    if (enemiesArray_2[j].isAlive)
                     {
-                        if (attackPositionsArrayAxe[i].row == enemiesArray[j].cell.posRow &&
-                            attackPositionsArrayAxe[i].col == enemiesArray[j].cell.posCol)
+                        if (attackPositionsArrayAxe[i].row == enemiesArray_2[j].cell.posRow &&
+                            attackPositionsArrayAxe[i].col == enemiesArray_2[j].cell.posCol)
                         {
 
-                            enemiesArray[j].hp -= 100;
+                            enemiesArray_2[j].hp -= 100;
 
-                            if (enemiesArray[j].hp <= 0)
+                            if (enemiesArray_2[j].hp <= 0)
                             {
-                                enemiesArray[j].isAlive = false;
-                                levelMap_2[enemiesArray[j].cell.posRow]
-                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                                enemiesArray_2[j].isAlive = false;
+                                levelMap_2[enemiesArray_2[j].cell.posRow]
+                                    [enemiesArray_2[j].cell.posCol].cellType = CellTypes::WALKABLE;
                             }
                         }
                     }
@@ -525,21 +529,21 @@ void CheckEnemyHit_2()
         case Weapons::POLE:
             if (attackPositionsArrayPole[i].attackPossible)
             {
-                for (int j = 0; j < maxEnemies; j++)
+                for (int j = 0; j < maxEnemies_2; j++)
                 {
-                    if (enemiesArray[j].isAlive)
+                    if (enemiesArray_2[j].isAlive)
                     {
-                        if (attackPositionsArrayPole[i].row == enemiesArray[j].cell.posRow &&
-                            attackPositionsArrayPole[i].col == enemiesArray[j].cell.posCol)
+                        if (attackPositionsArrayPole[i].row == enemiesArray_2[j].cell.posRow &&
+                            attackPositionsArrayPole[i].col == enemiesArray_2[j].cell.posCol)
                         {
 
-                            enemiesArray[j].hp -= 100;
+                            enemiesArray_2[j].hp -= 100;
 
-                            if (enemiesArray[j].hp <= 0)
+                            if (enemiesArray_2[j].hp <= 0)
                             {
-                                enemiesArray[j].isAlive = false;
-                                levelMap_2[enemiesArray[j].cell.posRow]
-                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                                enemiesArray_2[j].isAlive = false;
+                                levelMap_2[enemiesArray_2[j].cell.posRow]
+                                    [enemiesArray_2[j].cell.posCol].cellType = CellTypes::WALKABLE;
                             }
                         }
                     }
@@ -550,21 +554,21 @@ void CheckEnemyHit_2()
         case Weapons::POLEAXE:
             if (attackPositionsArrayPoleaxe[i].attackPossible)
             {
-                for (int j = 0; j < maxEnemies; j++)
+                for (int j = 0; j < maxEnemies_2; j++)
                 {
-                    if (enemiesArray[j].isAlive)
+                    if (enemiesArray_2[j].isAlive)
                     {
-                        if (attackPositionsArrayPoleaxe[i].row == enemiesArray[j].cell.posRow &&
-                            attackPositionsArrayPoleaxe[i].col == enemiesArray[j].cell.posCol)
+                        if (attackPositionsArrayPoleaxe[i].row == enemiesArray_2[j].cell.posRow &&
+                            attackPositionsArrayPoleaxe[i].col == enemiesArray_2[j].cell.posCol)
                         {
 
-                            enemiesArray[j].hp -= 100;
+                            enemiesArray_2[j].hp -= 100;
 
-                            if (enemiesArray[j].hp <= 0)
+                            if (enemiesArray_2[j].hp <= 0)
                             {
-                                enemiesArray[j].isAlive = false;
-                                levelMap_2[enemiesArray[j].cell.posRow]
-                                    [enemiesArray[j].cell.posCol].cellType = CellTypes::WALKABLE;
+                                enemiesArray_2[j].isAlive = false;
+                                levelMap_2[enemiesArray_2[j].cell.posRow]
+                                    [enemiesArray_2[j].cell.posCol].cellType = CellTypes::WALKABLE;
                             }
                         }
                     }
@@ -603,12 +607,12 @@ void CheckEnemyHit_2()
 
 void DrawEnemyAttack_2()
 {
-    for (int i = 0; i < maxEnemyActiveAttacks; i++)
+    for (int i = 0; i < maxEnemyActiveAttacks_2; i++)
     {
-        if (enemyAttackPosArray[i].isActive)
+        if (enemyAttackPosArray_2[i].isActive)
         {
             SetConsoleTextAttribute(hConsole_2, colorEnemyAttack);
-            Gotoxy(mapStartPosX + enemyAttackPosArray[i].col, mapStartPosY + enemyAttackPosArray[i].row);
+            Gotoxy(mapStartPosX + enemyAttackPosArray_2[i].col, mapStartPosY + enemyAttackPosArray_2[i].row);
             cout << charEnemyAttack;
             SetConsoleTextAttribute(hConsole_2, colorWalkable); 
         }
@@ -618,10 +622,10 @@ void DrawEnemyAttack_2()
 void Draw_2()
 {
     DrawPlayer_2();
-    DrawEnemies_2(enemiesArray);
+    DrawEnemies_2(enemiesArray_2);
     DrawEnemyAttack_2();
 
-    if (playerHasAttacked)
+    if (playerHasAttacked_2)
     {
         DrawPlayerAttack_2();
     }
@@ -644,16 +648,16 @@ void Draw_2()
     Gotoxy(fpsInfoPosX, fpsInfoPosY);
     cout << "FPS: " << static_cast<int>(fps) << "   ";
     // Draw Player's HP
-    if (playerHp < 100)
+    if (playerHp_2 < 100)
     {
         SetConsoleTextAttribute(hConsole_2, colorEnemy);
         Gotoxy(playerHpPosX, playerHpPosY);
-        cout << "HP:  " << playerHp;
+        cout << "HP:  " << playerHp_2;
     }
     else
     {
         Gotoxy(playerHpPosX, playerHpPosY);
-        cout << "HP: " << playerHp;
+        cout << "HP: " << playerHp_2;
     }
     
 
@@ -699,9 +703,9 @@ void DrawPlayer_2()
     SetConsoleTextAttribute(hConsole_2, colorWall);
 }
 
-void DrawEnemies_2(EnemyCell enemies[maxEnemies])
+void DrawEnemies_2(EnemyCell enemies[maxEnemies_2])
 {
-    for (int i = 0; i < totalEnemies; i++)
+    for (int i = 0; i < maxEnemies_2; i++)
     {
         if (enemies[i].isAlive)
         {
@@ -806,3 +810,4 @@ void Debug_DrawMap_2()
         cout << endl;
     }
 }
+

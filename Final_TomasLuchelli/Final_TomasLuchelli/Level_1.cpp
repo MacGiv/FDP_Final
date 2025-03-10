@@ -7,7 +7,7 @@ bool endLevelConditionMet = false;
   
 
 void Initialize_1(bool& continueGame, bool& playerLost);
-void Update_1(bool& continueGame);
+void Update_1(bool& continueGame, bool& playerLost);
 void Draw_1();
 
 void StartLevel_1(bool& continueGame, bool& playerLost)
@@ -25,10 +25,11 @@ void StartLevel_1(bool& continueGame, bool& playerLost)
     do
     {
         CalculateFPS(startTime, currentTime, lastTime, frameCount, fps);
-        Update_1(continueGame);
+        Update_1(continueGame, playerLost);
         Draw_1();
-        Sleep(16); // 16 milisecs "=" 64 FPS aprox
+        Sleep(16); 
     } while (continueGame && !playerLost);
+    playerPhase = 2;
 }
 
 void Initialize_1(bool& continueGame, bool& playerLost)
@@ -47,7 +48,7 @@ void Initialize_1(bool& continueGame, bool& playerLost)
     PrintMatrix(levelMap, hConsole);
 }
 
-void Update_1(bool& continueGame)
+void Update_1(bool& continueGame, bool& playerLost)
 {
     bool playerHasMoved = false;
     int inputChar = 0;
@@ -63,7 +64,7 @@ void Update_1(bool& continueGame)
         else
         {
             playerHasMoved = false;
-            continueGame = false;
+            playerLost = true;
         }
     }
 

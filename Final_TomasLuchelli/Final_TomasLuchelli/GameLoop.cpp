@@ -1,6 +1,7 @@
 #include "GameLoop.h"
 #include "Level_1.h"
 #include "Level_2.h"
+#include "Level_3.h"
 
 void StartGame()
 {
@@ -9,39 +10,27 @@ void StartGame()
 
 	do
 	{
-		bool playerAlive = true;
+		if (!playerLost && playerPhase == 1)
+		{
+			StartLevel_1(continueGame, playerLost);
+		}
 
-		//Start Level 1 / Tutorial Movement & Exit Point
-		system("cls");
-		StartLevel_1(continueGame, playerLost);
-
-		if (!playerLost)
+		if (!playerLost && playerPhase == 2)
 		{
 			StartLevel_2(continueGame, playerLost);
 		}
-
-		//## Only For debugging ##
-		Gotoxy(endLevelMsgPosX, endLevelMsgPosY);
-		system("pause");
-		//## Only For debugging ##
-
-		//Start Level 2 / Tutorial Attack
 		
-		//Start Level 3 / Tutorial Traps & Life recover
+		if (!playerLost && playerPhase == 3)
+		{
+			StartLevel_3(continueGame, playerLost);
+		}
 		
-		//Start Level 4 / Tutorial Enemies
-
-		//Start Level 5 / Traps 1
+		if (playerPhase == 0)
+		{
+			continueGame = false;
+		}
 		
-		//Start Level 5 / Enemies 1
-		
-		//Start Level 5 / Traps 2
-		
-		//Start Level 5 / Enemies 2
-		
-		//Start Level 6 Boss
-
-	} while (continueGame);
+	} while (!continueGame);
 
 
 

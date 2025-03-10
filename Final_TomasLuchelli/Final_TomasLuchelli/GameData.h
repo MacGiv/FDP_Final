@@ -94,8 +94,14 @@ struct playerAttackPosition
 	bool attackPossible = false;
 };
 
+extern playerAttackPosition attackPositionsArrayDagger[daggerAttacksPosAmount];
+extern playerAttackPosition attackPositionsArraySword[swordAttacksPosAmount];
+extern playerAttackPosition attackPositionsArrayAxe[axeAttacksPosAmount];
+extern playerAttackPosition attackPositionsArrayPole[poleAttacksPosAmount];
+extern playerAttackPosition attackPositionsArrayPoleaxe[poleaxeAttacksPosAmount];
+
 // Externs
-extern int playerLevelProgress;
+extern int playerPhase;
 extern double startTime;
 extern double currentTime;
 extern double lastTime;

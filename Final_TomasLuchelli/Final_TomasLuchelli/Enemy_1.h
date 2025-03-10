@@ -16,6 +16,7 @@ struct EnemyCell
 {
 	cellStruct cell;
 	int hp = 100;
+	int id = 0;
 	bool hasMoved = false;
 	bool isAlive = false;
 	bool isColliding = false;
@@ -30,7 +31,7 @@ struct enemyAttackPosition
 	bool isActive = false;
 };
 
-void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol);
+void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol, int id);
 
 void MoveEnemy(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols]);
 

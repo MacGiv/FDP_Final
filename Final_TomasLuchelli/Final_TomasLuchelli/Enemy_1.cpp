@@ -4,7 +4,7 @@ int attackIterator = 0;
 
 void MarkAttackCell(cellStruct map[mapSizeRows][mapSizeCols], int row, int col, enemyAttackPosition enemyAttacks[maxEnemyAttacksP1], int& atkIterator);
 
-void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol)
+void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol, int id)
 {
 	cellStruct enemyTemp;
 
@@ -21,6 +21,7 @@ void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol)
 	enemy.isColliding = false;
 	enemy.direction = EnemyDirection::UP;
 	enemy.hp = 100;
+	enemy.id = id;
 }
 
 void MoveEnemy(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])
@@ -79,13 +80,17 @@ void EnemyMoveUp(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])
 		enemy.hasMoved = false;
 		enemy.isColliding = true;
 		break;
-	// case CellTypes::ENEMY_ATTACK:
-	// 	enemy.cell.prevPosRow = enemy.cell.posRow;
-	// 	enemy.cell.prevPosCol = enemy.cell.posCol;
-	// 	enemy.cell.posRow -= 1;
-	// 	enemy.hasMoved = true;
-	// 	map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
-	// 	break;
+	case CellTypes::ENEMY_ATTACK:
+		enemy.cell.prevPosRow = enemy.cell.posRow;
+		enemy.cell.prevPosCol = enemy.cell.posCol;
+		enemy.cell.posRow -= 1;
+		enemy.hasMoved = true;
+		map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
+		break;
+	case CellTypes::ENEMY:
+		enemy.hasMoved = false;
+		enemy.isColliding = true;
+		break;
 	default:
 		enemy.hasMoved = false;
 		break;
@@ -114,6 +119,10 @@ void EnemyMoveDown(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])
 		enemy.hasMoved = true;
 		map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
 		break;
+	case CellTypes::ENEMY:
+		enemy.hasMoved = false;
+		enemy.isColliding = true;
+		break;
 	default:
 		enemy.hasMoved = false;
 		break;
@@ -135,13 +144,17 @@ void EnemyMoveRight(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])
 		enemy.hasMoved = false;
 		enemy.isColliding = true;
 		break;
-	// case CellTypes::ENEMY_ATTACK:
-	// 	enemy.cell.prevPosRow = enemy.cell.posRow;
-	// 	enemy.cell.prevPosCol = enemy.cell.posCol;
-	// 	enemy.cell.posCol += 1;
-	// 	enemy.hasMoved = true;
-	// 	map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
-	// 	break;
+	case CellTypes::ENEMY_ATTACK:
+		enemy.cell.prevPosRow = enemy.cell.posRow;
+		enemy.cell.prevPosCol = enemy.cell.posCol;
+		enemy.cell.posCol += 1;
+		enemy.hasMoved = true;
+		map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
+		break;
+	case CellTypes::ENEMY:
+		enemy.hasMoved = false;
+		enemy.isColliding = true;
+		break;
 	default:
 		enemy.hasMoved = false;
 		break;
@@ -163,13 +176,17 @@ void EnemyMoveLeft(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])
 		enemy.hasMoved = false;
 		enemy.isColliding = true;
 		break;
-	// case CellTypes::ENEMY_ATTACK:
-	// 	enemy.cell.prevPosRow = enemy.cell.posRow;
-	// 	enemy.cell.prevPosCol = enemy.cell.posCol;
-	// 	enemy.cell.posCol -= 1;
-	// 	enemy.hasMoved = true;
-	// 	map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
-	// 	break;
+	case CellTypes::ENEMY_ATTACK:
+		enemy.cell.prevPosRow = enemy.cell.posRow;
+		enemy.cell.prevPosCol = enemy.cell.posCol;
+		enemy.cell.posCol -= 1;
+		enemy.hasMoved = true;
+		map[enemy.cell.posRow][enemy.cell.posCol].cellType = CellTypes::ENEMY;
+		break;
+	case CellTypes::ENEMY:
+		enemy.hasMoved = false;
+		enemy.isColliding = true;
+		break;
 	default:
 		enemy.hasMoved = false;
 		break;
@@ -181,6 +198,23 @@ void EnemyAttack(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols], Ene
 	attackIterator = 0;
 	int row = enemy.cell.posRow;
 	int col = enemy.cell.posCol;
+	if (enemy.id > 0)
+	{
+		switch (attackType)
+		{
+		case EnemyAttackType::CROSS:
+			attackIterator += (4 * enemy.id);
+			break;
+		case EnemyAttackType::DIAGONAL:
+			attackIterator += (4 * enemy.id);
+			break;
+		case EnemyAttackType::SURROUND:
+			attackIterator += (8 * enemy.id);
+			break;
+		default:
+			break;
+		}
+	}
 
 	switch (attackType)
 	{

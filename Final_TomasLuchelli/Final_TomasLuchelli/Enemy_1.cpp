@@ -20,6 +20,7 @@ void InitializeEnemy(EnemyCell& enemy, int posRow, int posCol)
 	enemy.isAlive = true;
 	enemy.isColliding = false;
 	enemy.direction = EnemyDirection::UP;
+	enemy.hp = 100;
 }
 
 void MoveEnemy(EnemyCell& enemy, cellStruct map[mapSizeRows][mapSizeCols])

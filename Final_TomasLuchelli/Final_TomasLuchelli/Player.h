@@ -1,13 +1,12 @@
 #pragma once
 #include "GameData.h"
 #include "Utilities.h"
-
-enum class Weapons {DAGGER = 1, SWORD, AXE, POLE, POLEAXE};
+#include "Weapons.h"
 
 // Player data
 int extern playerHp;
 bool extern hitReceived;
-Weapons extern playerCurrentWeapon;
+Weapons extern playerCurrentWeapon_2;
 
 cellStruct InitializePlayer();
 
@@ -23,8 +22,10 @@ void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellS
 
 // Player Attacks
 void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell);
-
 void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell);
+void PlayerAttackAxe(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[axeAttacksPosAmount], cellStruct playerCell);
+void PlayerAttackPole(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[poleAttacksPosAmount], cellStruct playerCell);
+void PlayerAttackPoleaxe(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[poleaxeAttacksPosAmount], cellStruct playerCell);
 
 // Checks if the attempted attack is in range and puts the bool attackPossible in attackPosition's struct in true/false
 void IsAttackPossible(cellStruct map[mapSizeRows][mapSizeCols], playerAttackPosition& attackPos);

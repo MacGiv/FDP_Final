@@ -16,6 +16,60 @@ cellStruct InitializePlayer()
 	return playerTemp;
 }
 
+//Returns true if inputChar is W, A, S, or D
+bool IsMovementInput(char inputChar)
+{
+	switch (inputChar)
+	{
+	case 'w':
+	case 'W':
+		return true;
+		break;
+	case 's':
+	case 'S':
+		return true;
+		break;
+	case 'a':
+	case 'A':
+		return true;
+		break;
+		break;
+	case 'd':
+	case 'D':
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
+
+//Returns true if inputChar is I, J, K, or L
+bool IsAttackInput(char inputChar)
+{
+	switch (inputChar)
+	{
+	case 'i':
+	case 'I':
+		return true;
+		break;
+	case 'k':
+	case 'K':
+		return true;
+		break;
+	case 'j':
+	case 'J':
+		return true;
+		break;
+	case 'l':
+	case 'L':
+		return true;
+		break;
+	default:
+		return false;
+		break;
+	}
+}
 
 void ProcessPlayerMovement(bool& playerHasMoved, cellStruct& playerStruct, cellStruct myMatrix[mapSizeRows][mapSizeCols], char inputChar)
 {
@@ -155,6 +209,7 @@ AttackDirections GetAttackDirection(int inputChar)
 	}
 }
 
+// Get the positions of the Dagger's attack and check if they are valid. If the attack is valid, set the map cells to the PLAYER_ATTACK type and populate the Attack Position's array.
 void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[daggerAttacksPosAmount], cellStruct playerCell)
 {
 	GetAttackPositionsDagger(attackPos, attackDirection, playerCell);
@@ -168,6 +223,7 @@ void PlayerAttackDagger(cellStruct map[mapSizeRows][mapSizeCols], AttackDirectio
 	}
 }
 
+// Get the positions of the Sword's attack and check if they are valid. If the attack is valid, set the map cells to the PLAYER_ATTACK type and populate the Attack Position's array.
 void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[swordAttacksPosAmount], cellStruct playerCell)
 {
 	GetAttackPositionsSword(attackPos, attackDirection, playerCell);
@@ -181,59 +237,42 @@ void PlayerAttackSword(cellStruct map[mapSizeRows][mapSizeCols], AttackDirection
 	}
 }
 
-
-//Returns true if inputChar is W, A, S, or D
-bool IsMovementInput(char inputChar)
+void PlayerAttackAxe(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[axeAttacksPosAmount], cellStruct playerCell)
 {
-	switch (inputChar)
+	GetAttackPositionsAxe(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < axeAttacksPosAmount; i++)
 	{
-	case 'w':
-	case 'W':
-		return true;
-		break;
-	case 's':
-	case 'S':
-		return true;
-		break;
-	case 'a':
-	case 'A':
-		return true;
-		break;
-		break;
-	case 'd':
-	case 'D':
-		return true;
-		break;
-	default:
-		return false;
-		break;
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
+		{
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
+		}
 	}
 }
 
-//Returns true if inputChar is I, J, K, or L
-bool IsAttackInput(char inputChar)
+void PlayerAttackPole(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[poleAttacksPosAmount], cellStruct playerCell)
 {
-	switch (inputChar)
+	GetAttackPositionsPole(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < poleAttacksPosAmount; i++)
 	{
-	case 'i':
-	case 'I':
-		return true;
-		break;
-	case 'k':
-	case 'K':
-		return true;
-		break;
-	case 'j':
-	case 'J':
-		return true;
-		break;
-	case 'l':
-	case 'L':
-		return true;
-		break;
-	default:
-		return false;
-		break;
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
+		{
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
+		}
+	}
+}
+
+void PlayerAttackPoleaxe(cellStruct map[mapSizeRows][mapSizeCols], AttackDirections attackDirection, playerAttackPosition attackPos[poleaxeAttacksPosAmount], cellStruct playerCell)
+{
+	GetAttackPositionsPoleaxe(attackPos, attackDirection, playerCell);
+	for (int i = 0; i < poleaxeAttacksPosAmount; i++)
+	{
+		IsAttackPossible(map, attackPos[i]);
+		if (attackPos[i].attackPossible)
+		{
+			map[attackPos[i].row][attackPos[i].col].cellType = CellTypes::PLAYER_ATTACK;
+		}
 	}
 }
 

@@ -15,6 +15,7 @@ const int colorWalkable = 8;	 // Gray
 const int colorExit = 11;		 // Cyan
 const int colorEnemy = 12;		 // Red
 const int colorPlayerAttack = 9; // Blue
+const int colorEnemyAttack = 13; // Magenta
 
 // Special Characters
 const char charPlayer = 233;
@@ -54,13 +55,13 @@ const int endLevelMsgPosY = playerHpPosY + 1;
 // Dagger attacks 1 cell.
 // Sword attacks 2 cells.
 // Axe attacks 3 cells.
-// Pole attacks 1 cell.
-// Poleaxe attacks 3 cells.
+// Pole attacks 3 cell.
+// Poleaxe attacks 5 cells.
 int const daggerAttacksPosAmount = 1;
 int const swordAttacksPosAmount = 2;
-int const axeAttacksPosAmount = 3;
-int const poleAttacksPosAmount = 1;
-int const poleAxeAttacksPosAmount = 3;
+int const axeAttacksPosAmount = 4;
+int const poleAttacksPosAmount = 3;
+int const poleaxeAttacksPosAmount = 5;
 
 // Externs
 extern int playerLevelProgress;
@@ -69,9 +70,6 @@ extern double currentTime;
 extern double lastTime;
 extern int fps;
 extern int frameCount;
-
-// Progress related
-// ... TODO
 
 enum class CellTypes {DEFAULT, WALKABLE, WALL, PLAYER, ENEMY, EXIT, PLAYER_ATTACK, ENEMY_ATTACK };
 

@@ -110,7 +110,7 @@ void Draw_1()
 {
     // Draw UI
     Gotoxy(levelNumberInfoPosX, levelNumberInfoPosY);
-    cout << "Level: " << 1;
+    cout << "Level: 1";
 
     Gotoxy(objetiveInfoPosX, objetiveInfoPosY);
     cout << "Objective: Move the player to the exit using WASD. Press ESC to exit.";

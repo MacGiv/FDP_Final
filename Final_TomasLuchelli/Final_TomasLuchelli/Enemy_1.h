@@ -15,6 +15,7 @@ int const maxEnemyAttacksP3 = 32;
 struct EnemyCell
 {
 	cellStruct cell;
+	int hp = 100;
 	bool hasMoved = false;
 	bool isAlive = false;
 	bool isColliding = false;
